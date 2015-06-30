@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  
+  <title><![CDATA[A passionate coder, footballer and dreamer]]></title>
+  
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://blog.yubeiluo.me//"/>
+  <updated>2015-06-30T09:51:10.000Z</updated>
+  <id>http://blog.yubeiluo.me//</id>
+  
+  <author>
+    <name><![CDATA[David Yu]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Winston Rolling File Appender]]></title>
+    <link href="http://blog.yubeiluo.me/2015/06/29/Winston-Rolling-File-Appender/"/>
+    <id>http://blog.yubeiluo.me/2015/06/29/Winston-Rolling-File-Appender/</id>
+    <published>2015-06-29T08:36:02.000Z</published>
+    <updated>2015-06-30T09:51:10.000Z</updated>
+    <content type="html"><![CDATA[<p><a href="https://github.com/winstonjs/winston" target="_blank" rel="external">Winston</a> is a great library for asynchronous logging in nodejs applications. It has the wonderful abstraction of transport where log messages will be delivered to and several built-in transports are provided out of the box per the below table (the list is incomplete).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Transport Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Console</td>
+<td>Log the messages in the console</td>
+</tr>
+<tr>
+<td style="text-align:left">File</td>
+<td>Log the messages in a file such as <strong>app.log</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">DailyRotateFile</td>
+<td>Log the message in a file that rotates bases upon rules like the capped file size, date pattern</td>
+</tr>
+</tbody>
+</table>
+<p>For a production setup, you will find the <strong>DailyRotateFile</strong> transport useful since it could rotate your log files automatically based on the rules which are configurable.</p>
+<h2 id="Problems">Problems</h2><p>If you follow the instructions outlined in the official winston repo, it is very likely that you will feel as surprised as I do. To summarize, here is a list of issues that make me feel uncomfortable sorted by the level from the most serious to the least.</p>
+<h3 id="Message_Loss">Message Loss</h3><p>Yes!! You hear me, some messages will fail to be delivered to the log file. This is what exactly happened to my environment, where there are two transports configured, one is the <strong>Console</strong> and the other is the <strong>DailyRotateFile</strong>. After the app bootstraps, by comparing the messages between the console and the file, it is observed that some message will become lost in the file. Since logging is such as vital part of an application, how could you endure and afford the consequences of any message losses?</p>
+<h3 id="Not_Tailer_Friendly">Not Tailer Friendly</h3><p>I admit that it is the OCD that helps to forge a habit that every time before an app is run, I will open another terminal to tail the app log file to see if everything goes on smoothly as expected and this command is often an alias defined in the bash profile such as</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> app.log=tail <span class="operator">-f</span> <span class="variable">$APP_HOME</span>/logs/app.log</span><br></pre></td></tr></table></figure>
+<p>But when using the <strong>DailyRotateFile</strong> transport, the file name is dynamic according to the configured rules. The default value is the configured file name plus the current date suffix in the <strong>yyyy-mm-dd</strong> format like <strong>app.2015-06-29.log</strong>.</p>
+<p>The problem with this is that there is no way to define a permanent alias to tail the log file since the file name changes and it would be handy if the transport could produce a file that never changes its name but still contains the latest log messages.</p>
+<p>What about a symbolic link file that always links to the up-to-date log file and changes as well when the underlying file changes?</p>
+<h2 id="Solution">Solution</h2><p>After reading the source code of winston, I have decided to fork the <a href="https://github.com/mallocator/Winston-Rolling-File-Appender" target="_blank" rel="external">Winston-Rolling-File-Appender</a> and roll out my own version of <strong>DailyRotateFile</strong> transport. Please go to <a href="https://github.com/yubeiluo/Winston-Rolling-File-Appender" target="_blank" rel="external">Another-Winston-Rolling-File-Appender</a> for furthur details about this little tranport that makes my life eaiser. Hopefully it could help you as well if by any chance you are suffering from the same issues.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><a href="https://github.com/winstonjs/winston" target="_blank" rel="external">Winston</a> is a great library for asynchronous logging in ]]>
+    </summary>
+    
+      <category term="nodejs" scheme="http://blog.yubeiluo.me/tags/nodejs/"/>
+    
+      <category term="winston" scheme="http://blog.yubeiluo.me/tags/winston/"/>
+    
+      <category term="nodejs" scheme="http://blog.yubeiluo.me/categories/nodejs/"/>
+    
+  </entry>
+  
+</feed>
