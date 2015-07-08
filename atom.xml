@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.yubeiluo.me//"/>
-  <updated>2015-06-30T09:51:10.000Z</updated>
+  <updated>2015-07-08T11:00:29.000Z</updated>
   <id>http://blog.yubeiluo.me//</id>
   
   <author>
@@ -14,6 +14,85 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Use Css After Psuedo Element To Center Play Icon]]></title>
+    <link href="http://blog.yubeiluo.me/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/"/>
+    <id>http://blog.yubeiluo.me/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/</id>
+    <published>2015-07-08T08:58:58.000Z</published>
+    <updated>2015-07-08T11:00:29.000Z</updated>
+    <content type="html"><![CDATA[<p>Today, I would like to share with you some css tricks that were discovered and learned in my own project, where they were employed to place a play icon in the middle of an image.</p>
+<h1 id="Background">Background</h1><p>During my recent development of a web ui for managing the post library (user can see the list and perform actions on each of them), it is needed to render the UI based on the post type. For the post with attached video, it is required to display the <strong>play</strong> icon in the center of the video snapshot image that could be simply clicked by the user to play the video.</p>
+<h1 id="Desired_Effect">Desired Effect</h1><p>One picture is worth than thousands words and here comes the snapshot.</p>
+<p><img src="/uploads/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/snapshot-1.png" alt=""></p>
+<h1 id="Tricky_Things">Tricky Things</h1><p>In order to achieve the wanted functionality, it was not an easy task for me since I just re-picked up the web tech stack two months ago due to lack of labor and lots of stuff has changed dramatically.</p>
+<p>The most unpleasant issue I feel with front-end development is the enormous details that one has to take care of, such as the gigantic css rules. And it is very likely to forget the technique that was previously used.</p>
+<p>Next, I will talk about the facts and findings that were learned.</p>
+<h2 id="CSS_Positions">CSS Positions</h2><p>There are four possible values for the css <strong>position</strong> property per the below table.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">static</td>
+<td>the default value</td>
+</tr>
+<tr>
+<td style="text-align:left">relative</td>
+<td>relative to the original position and will stay in the normal document structure</td>
+</tr>
+<tr>
+<td style="text-align:left">absolute</td>
+<td>relative to the first positioned parent element and will be removed from the document structure</td>
+</tr>
+<tr>
+<td style="text-align:left">fixed</td>
+<td>relative to the viewport and will stay in the normal document structure</td>
+</tr>
+</tbody>
+</table>
+<p>Please be noted that when positioned as absolute, the following statements hold true:</p>
+<ol>
+<li><p>The element will become an inline-block element and its width and height will auto-adjust to the contained elements.</p>
+</li>
+<li><p>The parent element will not any reserve space for it and therefore overlapping could occur.</p>
+</li>
+<li><p>The element will be positioned relative to the first positioned parent element that has the position property set to a value other than <strong>static</strong></p>
+</li>
+</ol>
+<h2 id="Pseudo_Elements">Pseudo Elements</h2><p>What the hell are them? You may wonder the same as I did the first time when I heard the words. Actually, they are basically css rules like <strong>a:after,a:before</strong> that can 1) add more flexibility than plain javascript 2) remove unnecessary html code. Here are some facts to bear in mind.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="rule"><span class="attribute">a</span>:<span class="value">before&#123;</span><br><span class="line">  display: block</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">"the content will be inserted before the a's content"</span></span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><p>They do not appear in the DOM and are rendered by the css renderer. Henceforth, it is not possible to manipulate them via javascript.</p>
+</li>
+<li><p>The content property <strong>CAN NOT</strong> be missing.</p>
+</li>
+<li><p>The default display value is inline and can be modified to suit your needs.</p>
+</li>
+</ol>
+<h1 id="The_Solution">The Solution</h1><p>Okay, it is time to put all the pieces together to have the whole picture.</p>
+<p>First, the html markup:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"my-video-content"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">img</span> <span class="attribute">ng-src</span>=<span class="value">"&#123;&#123;feed.video.thumbnailUrl&#125;&#125;"</span> <span class="attribute">alt</span>=<span class="value">""</span> <span class="attribute">class</span>=<span class="value">"img-thumbnail"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">ng-click</span>=<span class="value">"playVideo(feed)"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Secondly, the css styles:<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.my-video-content</span> <span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> inline-block</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="class">.my-video-content</span> <span class="rule"><span class="attribute">a</span>:<span class="value">after &#123;</span><br><span class="line">	font-family: <span class="string">"Glyphicons Halflings"</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-font-smoothing</span>:<span class="value"> antialiased</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\e029"</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"> -<span class="number">20px</span> <span class="number">0</span> <span class="number">0</span> -<span class="number">20px</span></span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Explanation">Explanation</h2><ol>
+<li><p>The dimension of the video snapshot image is dynamic, so we need to have a container to have its width auto-adjust to that of the enclosed image. By default, the width of a div container will flow to 100% of its parent’s width and that is exactly where <strong>display=inline-block</strong> came to the rescue.</p>
+</li>
+<li><p>The <strong>.my-video-content a:after</strong> element is now positioned relative to the <strong>.my-video-content</strong> container and we also need to set both the top and left to 50% so that the left corner of the icon box is sitting in the middle of the image.</p>
+</li>
+<li><p>The goal is to center the icon box not the left corner, so we need to offset both the top and left margin to half of the icon’s height and width.</p>
+</li>
+</ol>
+<h1 id="Conclusion">Conclusion</h1><p>Hopefully, the above tips could come to help and inspire your own development and please do not hesitate to correct me if anything I wrote above is wrong.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Today, I would like to share with you some css tricks that were discovered and learned in my own project, where they were employed to pla]]>
+    </summary>
+    
+      <category term="css" scheme="http://blog.yubeiluo.me/categories/css/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Winston Rolling File Appender]]></title>
