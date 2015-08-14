@@ -24,7 +24,7 @@
 
 
 
-  <meta name="keywords" content="nodejs,winston," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -49,7 +49,7 @@
 
 
 
-  <title> Winston Rolling File Appender // A passionate coder, footballer and dreamer </title>
+  <title> Lessons-Learned-Transition-to-Frontend // A passionate coder, footballer and dreamer </title>
 </head>
 
 <body>
@@ -170,7 +170,7 @@
           
           
             
-              Winston Rolling File Appender
+              Lessons-Learned-Transition-to-Frontend
             
           
         </h1>
@@ -178,7 +178,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-06-29
+          Posted on 2015-08-14
         </span>
 
         
@@ -186,6 +186,14 @@
             &nbsp; | &nbsp; In
             
               <a href="/categories/nodejs/">nodejs</a>
+
+              
+              
+                , 
+              
+
+            
+              <a href="/categories/nodejs/angular/">angular</a>
 
               
               
@@ -198,8 +206,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/29/Winston-Rolling-File-Appender/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/29/Winston-Rolling-File-Appender/"></span>
+            <a href="/2015/08/14/Lessons-Learned-Transition-to-Frontend/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/14/Lessons-Learned-Transition-to-Frontend/"></span>
             </a>
           </span>
           
@@ -213,62 +221,71 @@
       
 
       
-        <p><a href="https://github.com/winstonjs/winston" target="_blank" rel="external">Winston</a> is a great library for asynchronous logging in nodejs applications. It has the wonderful abstraction of transport where log messages will be delivered to and several built-in transports are provided out of the box per the below table (the list is incomplete).</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Transport Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Console</td>
-<td>Log the messages in the console</td>
-</tr>
-<tr>
-<td style="text-align:left">File</td>
-<td>Log the messages in a file such as <strong>app.log</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">DailyRotateFile</td>
-<td>Log the message in a file that rotates bases upon rules like the capped file size, date pattern</td>
-</tr>
-</tbody>
-</table>
-<p>For a production setup, you will find the <strong>DailyRotateFile</strong> transport useful since it could rotate your log files automatically based on the rules which are configurable.</p>
-<h2 id="Problems">Problems</h2><p>If you follow the instructions outlined in the official winston repo, it is very likely that you will feel as surprised as I do. To summarize, here is a list of issues that make me feel uncomfortable sorted by the level from the most serious to the least.</p>
-<h3 id="Message_Loss">Message Loss</h3><p>Yes!! You hear me, some messages will fail to be delivered to the log file. This is what exactly happened to my environment, where there are two transports configured, one is the <strong>Console</strong> and the other is the <strong>DailyRotateFile</strong>. After the app bootstraps, by comparing the messages between the console and the file, it is observed that some message will become lost in the file. Since logging is such as vital part of an application, how could you endure and afford the consequences of any message losses?</p>
-<h3 id="Not_Tailer_Friendly">Not Tailer Friendly</h3><p>I admit that it is the OCD that helps to forge a habit that every time before an app is run, I will open another terminal to tail the app log file to see if everything goes on smoothly as expected and this command is often an alias defined in the bash profile such as</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> app.log=tail <span class="operator">-f</span> <span class="variable">$APP_HOME</span>/logs/app.log</span><br></pre></td></tr></table></figure>
-<p>But when using the <strong>DailyRotateFile</strong> transport, the file name is dynamic according to the configured rules. The default value is the configured file name plus the current date suffix in the <strong>yyyy-mm-dd</strong> format like <strong>app.2015-06-29.log</strong>.</p>
-<p>The problem with this is that there is no way to define a permanent alias to tail the log file since the file name changes and it would be handy if the transport could produce a file that never changes its name but still contains the latest log messages.</p>
-<p>What about a symbolic link file that always links to the up-to-date log file and changes as well when the underlying file changes?</p>
-<h2 id="Solution">Solution</h2><p>After reading the source code of winston, I have decided to fork the <a href="https://github.com/mallocator/Winston-Rolling-File-Appender" target="_blank" rel="external">Winston-Rolling-File-Appender</a> and roll out my own version of <strong>DailyRotateFile</strong> transport. Please go to <a href="https://github.com/yubeiluo/Winston-Rolling-File-Appender" target="_blank" rel="external">Another-Winston-Rolling-File-Appender</a> for furthur details about this little tranport that makes my life eaiser. Hopefully it could help you as well if by any chance you are suffering from the same issues.</p>
+        <p>It’s been almost a quarter since I joined the new team. For the recent month, all the efforts have been spent on the <strong>Mini ERP Project</strong> aiming to integrate internal workflows for increasing efficiency and boosting productivity. Proudly speaking, I have now transitioned to be a proficient front-end engineer within such a short period of time, so it is worth spending some more time in recording and more importantly summarizing the lessons learned in this unforgettable and challenging transition process.</p>
+<h1 id="Facts_&amp;_Lessons">Facts &amp; Lessons</h1><ol>
+<li><p>The first project is an existing one, developed by a seasoned front-end veteran, who was going to leave the team soon. The project was written in the <strong>MEAN</strong> stack using grunt as the build tool and helped enlighten me in various aspects of front-end engineering with enormous amount of working examples. The only cumbersome issue was that each time a new dependency was introduced, you had to manually wire them up in the main page, which obviously violates the <a href="https://en.wikipedia.org/wiki/Open/closed_principle" target="_blank" rel="external">OCP principle</a>. BTW, Java is my favorite programming language and I am obsessed with software design principles and practices with over 4 years experience of server side engineering, 1 year hands-on architectural experience.</p>
+</li>
+<li><p>As was told by many friends, Angular indeed has a very steep learning curve compared to other frameworks and it took me no less than two weeks before the angular way of thinking came into being in my mentality. However, once you get used to it, the previous pains totally paid off because you now have a damn powerful weapon added to your arsenal, which could help to solve many intricate problems in many cases with less code written. The core angular concepts are:</p>
+<ul>
+<li>Two-way data binding</li>
+<li>Dependency injection,</li>
+<li>Controllers</li>
+<li>Services</li>
+<li>Service providers</li>
+<li>Scope and scope inheritance</li>
+<li>Filters</li>
+</ul>
+<p>It is worth pointing out that you can not claim to be an Angular artisan unless you comprehend the inner workings of the directives and are capable of rolling out customized ones to suite your own use case.</p>
+</li>
+<li><p>GulpJs is a better build tool compared to GruntJs because of the following two reasons:</p>
+<ul>
+<li>It favors the concept of “coding over configuration”, which makes the code feel more explicit and readable, thus much easier for you to figure out what is going on.</li>
+<li>It out-performs GruntJs by working in a streaming manner just like Unix pipes. In GulpJs, almost everything is performed in memory and no intermediary file storage is required, thus saving tremendous amount of disk-io related time.</li>
+</ul>
+</li>
+<li><p><a href="https://github.com/Swiip/generator-gulp-angular" target="_blank" rel="external">Angular+GulpJs generator</a> is awesome in that you do not feel the hassle of wiring up dependencies manually in the main page any more since they are sorted out by the <a href="https://github.com/klei/gulp-angular-filesort" target="_blank" rel="external">angular-file-sort plugin</a>.</p>
+</li>
+<li><p>You should start way much earlier to experiment and prototype before the backend team kicks off and definitely do not wait until the backend API is ready. Nodejs + express could be leveraged to mock the real api and provide some fake data in order to make the whole workflow run.</p>
+</li>
+<li><p>Usability is important and you should always think from the perspective of the end users and make bold suggestions when necessary. Take the below comparison as an example:</p>
+<ul>
+<li><p>The origin detail page design</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-5.png" alt=""></p>
+</li>
+<li><p>The proposed design</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-4.png" alt=""></p>
+<p>As you can see, since the detail page is very lengthy, it will be very handy for an left-side navigation bar to be present when users are scrolling around.</p>
+</li>
+</ul>
+</li>
+<li><p>You should have a consistent error handling process in place to make troubleshooting a straightforward and time-saving task when something goes wrong.</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-6.png" alt=""></p>
+</li>
+</ol>
+<h1 id="Finished_Product">Finished Product</h1><p>Although the product is far from being perfect, I still would like to show off some highlights.</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-3.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-7.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-8.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-9.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-10.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-11.png" alt=""></p>
+<h1 id="Conclusion">Conclusion</h1><p>It will be great if this long post will be of any use for other backend engineers who also feel tempted to give it a shot in the front-end arena.</p>
 
       
     </div>
 
     <div class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/nodejs/"> #nodejs </a>
-          
-            <a href="/tags/winston/"> #winston </a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/">Use Css After Psuedo Element To Center Play Icon</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/">Use Css After Psuedo Element To Center Play Icon</a>
             
           </div>
         </div>
@@ -288,8 +305,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/06/29/Winston-Rolling-File-Appender/"
-               data-title="Winston Rolling File Appender" data-url="http://blog.yubeiluo.me/2015/06/29/Winston-Rolling-File-Appender/">
+          <div class="ds-thread" data-thread-key="2015/08/14/Lessons-Learned-Transition-to-Frontend/"
+               data-title="Lessons-Learned-Transition-to-Frontend" data-url="http://blog.yubeiluo.me/2015/08/14/Lessons-Learned-Transition-to-Frontend/">
           </div>
         
       </div>
@@ -407,7 +424,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">1.</span> <span class="nav-text">Problems</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Message_Loss"><span class="nav-number">1.1.</span> <span class="nav-text">Message Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Not_Tailer_Friendly"><span class="nav-number">1.2.</span> <span class="nav-text">Not Tailer Friendly</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Facts_&_Lessons"><span class="nav-number">1.</span> <span class="nav-text">Facts & Lessons</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Finished_Product"><span class="nav-number">2.</span> <span class="nav-text">Finished Product</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

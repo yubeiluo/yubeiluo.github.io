@@ -172,6 +172,139 @@
           
           
             
+              <a class="post-title-link" href="/2015/08/14/Lessons-Learned-Transition-to-Frontend/">
+                Lessons-Learned-Transition-to-Frontend
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2015-08-14
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/nodejs/">nodejs</a>
+
+              
+              
+                , 
+              
+
+            
+              <a href="/categories/nodejs/angular/">angular</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/08/14/Lessons-Learned-Transition-to-Frontend/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/14/Lessons-Learned-Transition-to-Frontend/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>It’s been almost a quarter since I joined the new team. For the recent month, all the efforts have been spent on the <strong>Mini ERP Project</strong> aiming to integrate internal workflows for increasing efficiency and boosting productivity. Proudly speaking, I have now transitioned to be a proficient front-end engineer within such a short period of time, so it is worth spending some more time in recording and more importantly summarizing the lessons learned in this unforgettable and challenging transition process.</p>
+<h1 id="Facts_&amp;_Lessons">Facts &amp; Lessons</h1><ol>
+<li><p>The first project is an existing one, developed by a seasoned front-end veteran, who was going to leave the team soon. The project was written in the <strong>MEAN</strong> stack using grunt as the build tool and helped enlighten me in various aspects of front-end engineering with enormous amount of working examples. The only cumbersome issue was that each time a new dependency was introduced, you had to manually wire them up in the main page, which obviously violates the <a href="https://en.wikipedia.org/wiki/Open/closed_principle" target="_blank" rel="external">OCP principle</a>. BTW, Java is my favorite programming language and I am obsessed with software design principles and practices with over 4 years experience of server side engineering, 1 year hands-on architectural experience.</p>
+</li>
+<li><p>As was told by many friends, Angular indeed has a very steep learning curve compared to other frameworks and it took me no less than two weeks before the angular way of thinking came into being in my mentality. However, once you get used to it, the previous pains totally paid off because you now have a damn powerful weapon added to your arsenal, which could help to solve many intricate problems in many cases with less code written. The core angular concepts are:</p>
+<ul>
+<li>Two-way data binding</li>
+<li>Dependency injection,</li>
+<li>Controllers</li>
+<li>Services</li>
+<li>Service providers</li>
+<li>Scope and scope inheritance</li>
+<li>Filters</li>
+</ul>
+<p>It is worth pointing out that you can not claim to be an Angular artisan unless you comprehend the inner workings of the directives and are capable of rolling out customized ones to suite your own use case.</p>
+</li>
+<li><p>GulpJs is a better build tool compared to GruntJs because of the following two reasons:</p>
+<ul>
+<li>It favors the concept of “coding over configuration”, which makes the code feel more explicit and readable, thus much easier for you to figure out what is going on.</li>
+<li>It out-performs GruntJs by working in a streaming manner just like Unix pipes. In GulpJs, almost everything is performed in memory and no intermediary file storage is required, thus saving tremendous amount of disk-io related time.</li>
+</ul>
+</li>
+<li><p><a href="https://github.com/Swiip/generator-gulp-angular" target="_blank" rel="external">Angular+GulpJs generator</a> is awesome in that you do not feel the hassle of wiring up dependencies manually in the main page any more since they are sorted out by the <a href="https://github.com/klei/gulp-angular-filesort" target="_blank" rel="external">angular-file-sort plugin</a>.</p>
+</li>
+<li><p>You should start way much earlier to experiment and prototype before the backend team kicks off and definitely do not wait until the backend API is ready. Nodejs + express could be leveraged to mock the real api and provide some fake data in order to make the whole workflow run.</p>
+</li>
+<li><p>Usability is important and you should always think from the perspective of the end users and make bold suggestions when necessary. Take the below comparison as an example:</p>
+<ul>
+<li><p>The origin detail page design</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-5.png" alt=""></p>
+</li>
+<li><p>The proposed design</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-4.png" alt=""></p>
+<p>As you can see, since the detail page is very lengthy, it will be very handy for an left-side navigation bar to be present when users are scrolling around.</p>
+</li>
+</ul>
+</li>
+<li><p>You should have a consistent error handling process in place to make troubleshooting a straightforward and time-saving task when something goes wrong.</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-6.png" alt=""></p>
+</li>
+</ol>
+<h1 id="Finished_Product">Finished Product</h1><p>Although the product is far from being perfect, I still would like to show off some highlights.</p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-3.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-7.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-8.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-9.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-10.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-Transition-to-Frontend/screenshot-11.png" alt=""></p>
+<h1 id="Conclusion">Conclusion</h1><p>It will be great if this long post will be of any use for other backend engineers who also feel tempted to give it a shot in the front-end arena.</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/">
                 Use Css After Psuedo Element To Center Play Icon
               </a>
@@ -443,14 +576,14 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
