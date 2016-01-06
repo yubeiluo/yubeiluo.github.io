@@ -172,6 +172,217 @@
           
           
             
+              <a class="post-title-link" href="/2016/01/06/How-to-Create-A-Successful-GitLab-Workflow/">
+                How-to-Create-A-Successful-GitLab-Workflow
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-01-06
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/gitlab/">gitlab</a>
+
+              
+              
+                , 
+              
+
+            
+              <a href="/categories/gitlab/continuous-integration/">continuous integration</a>
+
+              
+              
+                , 
+              
+
+            
+              <a href="/categories/gitlab/continuous-integration/continuous-delivery/">continuous delivery</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/01/06/How-to-Create-A-Successful-GitLab-Workflow/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/06/How-to-Create-A-Successful-GitLab-Workflow/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>In this blog, I will walk you through the detailed steps that are required to setup a successful and efficient Git workflow powered by the modern, excellent open source software that I have ever used, which is GitLab.</p>
+<h1 id="Background">Background</h1><p>TL;DR</p>
+<p>What on earth am I blogging this for? Well, since my Git story could date back to year 2013 and GitLab one to 2014. these are the real drivers for this blog.</p>
+<p>When I joined the 18birdies dev team half a year ago, <a href="https://subversion.apache.org/" target="_blank" rel="external">SVN</a> is the SCM tool that is being used for hosting the source code repositories for all the ongoing projects: iOS App, Android App, Server (Java), Web, etc. And this is the same case for the previous <a href="http://www.mashanglc.com/" target="_blank" rel="external">company</a> that I worked for, where <a href="https://git-scm.com/" target="_blank" rel="external">Git</a> and <a href="https://gitlab.com/" target="_blank" rel="external">GitLab</a> were introduced and popularized by me.</p>
+<p>Last week, we have a new seasoned front-end developer on-board, who is also a Git addict as well as me. After some rounds of debate with CTO, he finally agreed that we should start to use Git in place of SVN, but an appropriate development workflow should be proposed and standardized so that all the different teams could conduct development in a consistent way.</p>
+<h1 id="Git">Git</h1><h2 id="Why">Why</h2><p>I have summarized as follows a list of reasons why Git should be used instead of SVN:</p>
+<ul>
+<li>Git is a <a href="https://en.wikipedia.org/wiki/Distributed_version_control" target="_blank" rel="external">DVCS</a>, which avoids the SPOF or single point of failure.</li>
+<li>Git is branching friendly, where branching and merging is a very lightweight operation.</li>
+<li><a href="https://en.wikipedia.org/wiki/Linus_Torvalds" target="_blank" rel="external">Linus</a> is Git’s author</li>
+</ul>
+<h2 id="Version_Control">Version Control</h2><p>There exists basically three types of version control systems:</p>
+<ol>
+<li>Local</li>
+<li>Centralized</li>
+<li>Distributed</li>
+</ol>
+<h3 id="Local">Local</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-1.png" alt=""></p>
+<p>One example is the <strong>RCS</strong> command that is available in major Linux distributions. Here is how RCS works:</p>
+<ul>
+<li>Calculating the diffs between each version</li>
+<li>Storing the diffs or patches in a special format in disk</li>
+<li>Re-recreate any file at any time by applying all the diffs since the initial version.</li>
+</ul>
+<p>Shortcomings:</p>
+<ul>
+<li>SPOF</li>
+<li>Do Not scale</li>
+</ul>
+<h3 id="Centralized">Centralized</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-2.png" alt=""></p>
+<p>Examples are CVS, SVN, Perforce. And a typical one works like this:</p>
+<ul>
+<li>A single dedicated server that serves all the versioned files</li>
+<li>A number of clients check out / in files from and to the server.</li>
+</ul>
+<p>Advantages over Local:</p>
+<ul>
+<li>There is communication among the team members since everyone knows to some extent what others are currently doing.</li>
+<li>Authentication and Authorization. Admins could control what everyone could do.</li>
+</ul>
+<p>Flaws:</p>
+<ul>
+<li>SPOF. If the centralized server is down for some time, it becomes a blocker since nobody could do anything during the downtime: collaborate or save the changes. If the server’s disks become corrupted and there are no backups, the entire history of the project is lost.</li>
+</ul>
+<h3 id="Distributed">Distributed</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-3.png" alt=""></p>
+<p>Examples are Git, Mercurial, Bazaar. And the fundamental difference is that the clients not only checkout the latest snapshot of the files but also fully mirrors the remote repository. Therefore, it provides the following bonuses:</p>
+<ul>
+<li>Every clone is a full backup of all the data including the complete history</li>
+<li>In case of server downtime, any of the client’s repository could be copied back to the server to restore it.</li>
+<li>Client can work with multiple remote repositories simultaneously within the same project.</li>
+</ul>
+<h2 id="History">History</h2><p>The following list is a brief summary of Git’s history based on the <a href="http://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git" target="_blank" rel="external">official history page</a>:</p>
+<ul>
+<li>From 1991 to 2002, Linux Kernel were maintained via using patches.</li>
+<li>In 2002, the project began to use a proprietary DVCS called BitKeeper.</li>
+<li>In 2005, BitKeep started to charge the tool and the Linus Torvalds decided to develop their own tool based on the lessons learned when using BitKeeper with the following goals:<ol>
+<li>Speed</li>
+<li>Simple design</li>
+<li>Strong support for non-linear development</li>
+<li>Fully Distributed</li>
+<li>Able to handle projects like the Linux Kernel efficiently (speed and data size)</li>
+</ol>
+</li>
+</ul>
+<h2 id="Basic_Concepts">Basic Concepts</h2><ol>
+<li><p>Snapshots not differences.</p>
+<p>Conceptually, most other systems store information as a list of file-based changes. These systems (CVS, Subversion, Perforce, Bazaar, and so on) think of the information they keep as a set of files and the changes made to each file over time.</p>
+<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-4.png" alt=""></p>
+<p>Git thinks of its data more like a set of snapshots of a miniature filesystem. Git thinks about its data more like a stream of snapshots.</p>
+<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-5.png" alt=""></p>
+</li>
+<li><p>Nearly all operations are local.  </p>
+</li>
+<li><p>Git has integrity.</p>
+</li>
+<li><p>Git generally only add data.</p>
+</li>
+<li><p>The three states.</p>
+<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-6.png" alt=""></p>
+<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-7.png" alt=""></p>
+<p>The basic workflow goes something like this:</p>
+<ol>
+<li>You modify files in your working directory.</li>
+<li>You stage the files, adding snapshots of them to your staging area.</li>
+<li>You do a commit, which takes the files as they are in the staging area and stores that snapshot permanently to your Git directory.</li>
+</ol>
+</li>
+</ol>
+<h2 id="Basic_Commands">Basic Commands</h2><ol>
+<li><p>Each Git repository has a .git directory, which stores all the metadata about it, the history tree.</p>
+<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-8.png" alt=""></p>
+</li>
+<li><p>Run <strong>git init</strong> to create a git repository in an existing directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> repo</span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Run <strong>git clone</strong> to clone a remote repository (Make sure your ssh public keys are uploaded to the remote server).</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitlab<span class="class">.squarevalleytech</span><span class="class">.com</span>:<span class="number">18</span>bidies-frontend/web.git</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Configuration">Configuration</h3><p>Git stores its configuration in two places:</p>
+<ul>
+<li><p>~/.gitconfig (global, apply to all git repositories)</p>
+</li>
+<li><p>repo/.git/config (local, apply to local git repository, override the global one)</p>
+</li>
+<li><p>List the local configurations.</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config -<span class="keyword">l</span> --<span class="keyword">local</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>List the global configurations.</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config -<span class="keyword">l</span> --<span class="keyword">global</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add a local configuration item.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config user<span class="class">.name</span> davidyu</span><br><span class="line">git config user<span class="class">.email</span> davidyu@squarevalleytech.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add a global configuration item.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user<span class="class">.name</span> davidyu</span><br><span class="line">git config --global user<span class="class">.email</span> davidyu@squarevalleytech.com</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Please go to the <a href="http://git-scm.com/docs/gittutorial" target="_blank" rel="external">official tutorial website</a> for an in-depth instructions about learning Git.</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/08/14/Lessons-Learned-Transition-to-Frontend/">
                 Lessons-Learned-Transition-to-Frontend
               </a>
@@ -576,14 +787,14 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
@@ -653,8 +864,8 @@
       <div class="footer-inner">
         <div class="copyright">
   
-  &copy; &nbsp; 
-  2015
+  &copy; &nbsp;  2015 - 
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>
