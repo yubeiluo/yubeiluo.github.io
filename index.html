@@ -234,11 +234,23 @@
 
       
         
-          <p>In this blog, I will walk you through the detailed steps that are required to setup a successful and efficient Git workflow powered by the modern, excellent open source software that I have ever used, which is GitLab.</p>
+          <p>In this blog, I will walk you through the detailed steps that are required to setup a successful and efficient Git workflow powered by the modern, excellent open source software that I have ever used, <strong>GitLab</strong>. This workflow aims to achieve the following goals:</p>
+<ul>
+<li><p>Code Review. Force developers to form the habit of code review before code is accepted in the main line.</p>
+</li>
+<li><p>Continuous Integration. By default, every commit should trigger a build, which should include performing regression testing to discover failures earlier not later.</p>
+</li>
+<li><p>Continuous Delivery. Push to deploy should be in place to save the manual deploy effort.</p>
+</li>
+</ul>
 <h1 id="Background">Background</h1><p>TL;DR</p>
-<p>What on earth am I blogging this for? Well, since my Git story could date back to year 2013 and GitLab one to 2014. these are the real drivers for this blog.</p>
-<p>When I joined the 18birdies dev team half a year ago, <a href="https://subversion.apache.org/" target="_blank" rel="external">SVN</a> is the SCM tool that is being used for hosting the source code repositories for all the ongoing projects: iOS App, Android App, Server (Java), Web, etc. And this is the same case for the previous <a href="http://www.mashanglc.com/" target="_blank" rel="external">company</a> that I worked for, where <a href="https://git-scm.com/" target="_blank" rel="external">Git</a> and <a href="https://gitlab.com/" target="_blank" rel="external">GitLab</a> were introduced and popularized by me.</p>
-<p>Last week, we have a new seasoned front-end developer on-board, who is also a Git addict as well as me. After some rounds of debate with CTO, he finally agreed that we should start to use Git in place of SVN, but an appropriate development workflow should be proposed and standardized so that all the different teams could conduct development in a consistent way.</p>
+<p>What on earth am I blogging this for? Well, since my Git story could date back to year 2013 and GitLab  to 2014. these are the real drivers for this blog:</p>
+<ul>
+<li><p>When I joined the <a href="https://18birdies.com/" target="_blank" rel="external">18birdies dev team</a> half a year ago, <a href="https://subversion.apache.org/" target="_blank" rel="external">SVN</a> is the only SCM tool being used for hosting the source code repositories of all the ongoing projects: iOS App, Android App, Server (Java), Web, etc. Ironically this is the same case for the previous <a href="http://www.mashanglc.com/" target="_blank" rel="external">company</a> that I worked for, where <a href="https://git-scm.com/" target="_blank" rel="external">Git</a> and <a href="https://gitlab.com/" target="_blank" rel="external">GitLab</a> were successfully introduced and popularized with my effort.</p>
+</li>
+<li><p>Last week, we had a new seasoned front-end developer on-board, another Git addict like me (glab to have a company). After some rounds of debate with CTO, he finally agreed that we should start to use Git in place of SVN, but before that, an appropriate development workflow or SDLC should be proposed and standardized so that all the different teams could conduct the development in a cohesive and consistent way.</p>
+</li>
+</ul>
 <h1 id="Git">Git</h1><h2 id="Why">Why</h2><p>I have summarized as follows a list of reasons why Git should be used instead of SVN:</p>
 <ul>
 <li>Git is a <a href="https://en.wikipedia.org/wiki/Distributed_version_control" target="_blank" rel="external">DVCS</a>, which avoids the SPOF or single point of failure.</li>
