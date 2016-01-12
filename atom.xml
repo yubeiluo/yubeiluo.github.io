@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.yubeiluo.me//"/>
-  <updated>2016-01-06T10:31:51.000Z</updated>
+  <updated>2016-01-12T07:19:05.000Z</updated>
   <id>http://blog.yubeiluo.me//</id>
   
   <author>
@@ -16,22 +16,23 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[How-to-Create-A-Successful-GitLab-Workflow]]></title>
-    <link href="http://blog.yubeiluo.me/2016/01/06/How-to-Create-A-Successful-GitLab-Workflow/"/>
-    <id>http://blog.yubeiluo.me/2016/01/06/How-to-Create-A-Successful-GitLab-Workflow/</id>
+    <title><![CDATA[A-Successful-GitLab-Workflow-Git-Basics]]></title>
+    <link href="http://blog.yubeiluo.me/2016/01/06/A-Successful-GitLab-Workflow-Git-Basics/"/>
+    <id>http://blog.yubeiluo.me/2016/01/06/A-Successful-GitLab-Workflow-Git-Basics/</id>
     <published>2016-01-06T06:58:06.000Z</published>
-    <updated>2016-01-06T10:31:51.000Z</updated>
-    <content type="html"><![CDATA[<p>In this blog, I will walk you through the detailed steps that are required to setup a successful and efficient Git workflow powered by the modern, excellent open source software that I have ever used, <strong>GitLab</strong>. This workflow aims to achieve the following goals:</p>
+    <updated>2016-01-12T07:19:05.000Z</updated>
+    <content type="html"><![CDATA[<p>In this blog, I will present you how to setup a successful and efficient Git workflow powered by the modern, excellent open source software that I have ever used, <strong>GitLab</strong>. The workflow aims to achieve the following targets:</p>
 <ul>
-<li><p>Code Review. Force developers to form the habit of code review before code is accepted in the main line.</p>
+<li><p>Code Review. Cultivate a culture and good habit of of code review before code is accepted in the main line.</p>
 </li>
-<li><p>Continuous Integration. By default, every commit should trigger a build, which should include performing regression testing to discover failures earlier not later.</p>
+<li><p>Continuous Integration. By default, every commit will trigger a build, which should include performing regression testing to discover failures earlier not later.</p>
 </li>
 <li><p>Continuous Delivery. Push to deploy should be in place to save the manual deploy effort.</p>
 </li>
 </ul>
+<p>For better organization, the topic will be discussed in two separate blogs with the first focused on the Git basics and second focused on the Gitlab. And this blog is the first one, in which, the inner workings and basic concepts of Git will be talked about at length.</p>
 <h1 id="Background">Background</h1><p>TL;DR</p>
-<p>What on earth am I blogging this for? Well, since my Git story could date back to year 2013 and GitLab  to 2014. these are the real drivers for this blog:</p>
+<p>What on earth am I blogging this for? Well, since my Git story could date back to year 2013 and GitLab to 2014. these are the real drivers for this blog:</p>
 <ul>
 <li><p>When I joined the <a href="https://18birdies.com/" target="_blank" rel="external">18birdies dev team</a> half a year ago, <a href="https://subversion.apache.org/" target="_blank" rel="external">SVN</a> is the only SCM tool being used for hosting the source code repositories of all the ongoing projects: iOS App, Android App, Server (Java), Web, etc. Ironically this is the same case for the previous <a href="http://www.mashanglc.com/" target="_blank" rel="external">company</a> that I worked for, where <a href="https://git-scm.com/" target="_blank" rel="external">Git</a> and <a href="https://gitlab.com/" target="_blank" rel="external">GitLab</a> were successfully introduced and popularized with my effort.</p>
 </li>
@@ -41,16 +42,16 @@
 <h1 id="Git">Git</h1><h2 id="Why">Why</h2><p>I have summarized as follows a list of reasons why Git should be used instead of SVN:</p>
 <ul>
 <li>Git is a <a href="https://en.wikipedia.org/wiki/Distributed_version_control" target="_blank" rel="external">DVCS</a>, which avoids the SPOF or single point of failure.</li>
-<li>Git is branching friendly, where branching and merging is a very lightweight operation.</li>
-<li><a href="https://en.wikipedia.org/wiki/Linus_Torvalds" target="_blank" rel="external">Linus</a> is Git’s author</li>
+<li>Git is <a href="#Branching">branching</a> friendly, where branching and merging is a superb lightweight operation.</li>
+<li><a href="https://en.wikipedia.org/wiki/Linus_Torvalds" target="_blank" rel="external">Linus</a> is Git’s author and Linus is my God!</li>
 </ul>
-<h2 id="Version_Control">Version Control</h2><p>There exists basically three types of version control systems:</p>
+<h2 id="Version_Control">Version Control</h2><p>Historically, there exists three types of version control systems:</p>
 <ol>
 <li>Local</li>
-<li>Centralized</li>
+<li>Centralize</li>
 <li>Distributed</li>
 </ol>
-<h3 id="Local">Local</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-1.png" alt=""></p>
+<h3 id="Local">Local</h3><p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-1.png" alt=""></p>
 <p>One example is the <strong>RCS</strong> command that is available in major Linux distributions. Here is how RCS works:</p>
 <ul>
 <li>Calculating the diffs between each version</li>
@@ -62,7 +63,7 @@
 <li>SPOF</li>
 <li>Do Not scale</li>
 </ul>
-<h3 id="Centralized">Centralized</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-2.png" alt=""></p>
+<h3 id="Centralized">Centralized</h3><p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-2.png" alt=""></p>
 <p>Examples are CVS, SVN, Perforce. And a typical one works like this:</p>
 <ul>
 <li>A single dedicated server that serves all the versioned files</li>
@@ -77,14 +78,14 @@
 <ul>
 <li>SPOF. If the centralized server is down for some time, it becomes a blocker since nobody could do anything during the downtime: collaborate or save the changes. If the server’s disks become corrupted and there are no backups, the entire history of the project is lost.</li>
 </ul>
-<h3 id="Distributed">Distributed</h3><p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-3.png" alt=""></p>
+<h3 id="Distributed">Distributed</h3><p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-3.png" alt=""></p>
 <p>Examples are Git, Mercurial, Bazaar. And the fundamental difference is that the clients not only checkout the latest snapshot of the files but also fully mirrors the remote repository. Therefore, it provides the following bonuses:</p>
 <ul>
 <li>Every clone is a full backup of all the data including the complete history</li>
 <li>In case of server downtime, any of the client’s repository could be copied back to the server to restore it.</li>
 <li>Client can work with multiple remote repositories simultaneously within the same project.</li>
 </ul>
-<h2 id="History">History</h2><p>The following list is a brief summary of Git’s history based on the <a href="http://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git" target="_blank" rel="external">official history page</a>:</p>
+<h2 id="History">History</h2><p>The following list is a brief summary about Git’s history based on the <a href="http://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git" target="_blank" rel="external">official history page</a>:</p>
 <ul>
 <li>From 1991 to 2002, Linux Kernel were maintained via using patches.</li>
 <li>In 2002, the project began to use a proprietary DVCS called BitKeeper.</li>
@@ -100,19 +101,31 @@
 <h2 id="Basic_Concepts">Basic Concepts</h2><ol>
 <li><p>Snapshots not differences.</p>
 <p>Conceptually, most other systems store information as a list of file-based changes. These systems (CVS, Subversion, Perforce, Bazaar, and so on) think of the information they keep as a set of files and the changes made to each file over time.</p>
-<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-4.png" alt=""></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-4.png" alt=""></p>
 <p>Git thinks of its data more like a set of snapshots of a miniature filesystem. Git thinks about its data more like a stream of snapshots.</p>
-<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-5.png" alt=""></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-5.png" alt=""></p>
 </li>
 <li><p>Nearly all operations are local.  </p>
+<p>You could continue to work (create branches, make changes, commit) even when the remote repositories become not available.</p>
 </li>
 <li><p>Git has integrity.</p>
+<p>All the contents are checksummed using <a href="https://en.wikipedia.org/wiki/SHA-1" target="_blank" rel="external">SHA-1</a> so that Git is able to detect any malicious behavior and accidents that result in unintended content changes.</p>
+<ul>
+<li><p>Disk corruption</p>
+</li>
+<li><p>DRAM corruption</p>
+</li>
+<li><p>Middle of Man Attack</p>
+</li>
+</ul>
+<p>Git makes use of the <a href="https://en.wikipedia.org/wiki/Merkle_tree" target="_blank" rel="external">Merkle Tree</a> data structure for the purpose of efficient and secure validation of the contents of large data structures.</p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-9.png" alt=""></p>
 </li>
 <li><p>Git generally only add data.</p>
 </li>
 <li><p>The three states.</p>
-<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-6.png" alt=""></p>
-<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-7.png" alt=""></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-6.png" alt=""></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-7.png" alt=""></p>
 <p>The basic workflow goes something like this:</p>
 <ol>
 <li>You modify files in your working directory.</li>
@@ -122,13 +135,13 @@
 </li>
 </ol>
 <h2 id="Basic_Commands">Basic Commands</h2><ol>
-<li><p>Each Git repository has a .git directory, which stores all the metadata about it, the history tree.</p>
-<p><img src="/uploads/How-to-Create-A-Successful-GitLab-Workflow/screenshot-8.png" alt=""></p>
+<li><p>Each Git repository has a .git directory, storing metadata about the project, the most important of which is the history.</p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-8.png" alt=""></p>
 </li>
 <li><p>Run <strong>git init</strong> to create a git repository in an existing directory.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> repo</span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Run <strong>git clone</strong> to clone a remote repository (Make sure your ssh public keys are uploaded to the remote server).</p>
+<li><p>Run <strong>git clone</strong> to clone a remote repository (<strong>Make sure your ssh public keys are uploaded to the remote server</strong>).</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@gitlab<span class="class">.squarevalleytech</span><span class="class">.com</span>:<span class="number">18</span>bidies-frontend/web.git</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -152,16 +165,123 @@
 </li>
 </ul>
 <p>Please go to the <a href="http://git-scm.com/docs/gittutorial" target="_blank" rel="external">official tutorial website</a> for an in-depth instructions about learning Git.</p>
+<h2 id="Object_Model">Object Model</h2><p>In a nutshell, this is how the Git object model looks like conceptually:</p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-16.png" alt=""></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-17.png" alt=""></p>
+<h3 id="Core">Core</h3><p>The first time you use Git, it’s almost a guarantee that you will feel confused from time to time about the usage of the monstrous command set, at lease it was true for me. And in order to clear away these confusions, it’s better to figure out what is happening beneath the covers from an implementation perspective.</p>
+<p>So let’s start by creating an empty repository first named as object-model.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir <span class="class"><span class="keyword">object</span><span class="title">-model</span></span><br><span class="line"></span>git init</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-10.png" alt=""></p>
+<p>Git will then create an <strong>.git</strong> directory where it stores the database for your project and this database contains the following items:</p>
+<ul>
+<li><p>config: the project specific configuration</p>
+</li>
+<li><p>refs: the branches, remotes, tags</p>
+</li>
+<li><p>HEAD: store a reference to the current branch</p>
+</li>
+<li><p>objects: the object database</p>
+</li>
+<li><p>hooks: Git event system</p>
+</li>
+<li><p>index: the staging area for incoming changes.</p>
+</li>
+</ul>
+<p>Let’s add a README file and stage it.</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="string">"This is the first line"</span> &gt; README</span><br><span class="line">git <span class="built_in">add</span> README</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-11.png" alt=""></p>
+<p>As it could be seen from the above screenshot, when a new file is staged, the following things will happen in Git:</p>
+<ul>
+<li><p>Git creates a blob object with the hash of the file contents as the filename. In our case, the contents are <strong>This is the first line</strong>, and the hash is <strong>d3e2104b9e57bf5147ed403e1f8c4760302b9387</strong>. The leading two characters <strong>d3</strong> will be used to create a directory and the remained ones <strong>e2104b9e57bf5147ed403e1f8c4760302b9387</strong> will be used as the actual file name. The contents are compressed.</p>
+</li>
+<li><p>Git stores a reference in the index that points to the new file README. (The index itself is essentially a tree object).</p>
+</li>
+<li><p>Update the index tree object.</p>
+</li>
+</ul>
+<p>Make our first commit.</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">git</span> commit -m <span class="string">'first commit'</span></span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-12.png" alt=""></p>
+<p>When staged changes are committed, Git will do:</p>
+<ul>
+<li><p>Create the same tree object as the index.</p>
+</li>
+<li><p>Create a commit object with a reference to the tree.</p>
+</li>
+<li><p>Flip the tip of the current branch to point to the commit object.</p>
+</li>
+</ul>
+<p>Now that the <strong>README</strong> file is being tracked by Git, let’s make some modifications to it.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"This is the second line"</span> <span class="prompt">&gt;&gt; </span><span class="constant">README</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-13.png" alt=""></p>
+<p>The changes are not staged yet, so let’s stage the changed file.<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">git</span> <span class="keyword">add </span>README</span><br><span class="line"><span class="label">git</span> status</span><br></pre></td></tr></table></figure></p>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-14.png" alt=""></p>
+<p>When you stage a tracked file, Git will do the same thing as staging a new file. That explains Git is indeed snapshotting instead of differencing between revisions or commits.</p>
+<p>Finally, commit the changes.</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">git</span> commit -m <span class="string">"second commit"</span></span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-15.png" alt=""></p>
+<p>The only difference for this commit was that it stored a reference to the parent commit <strong>9d2864f</strong>, whereby forming a commit tree data structure, which is virtually project’s history.</p>
+<h3 id="Branching">Branching</h3><p>Understand the Git’s object model is important before you could appreciate why Git supports non-linear development or branching very well. Let’s explore more by creating a new branch <strong>develop</strong>.</p>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git branch develop</span><br><span class="line">git checkout develop</span><br><span class="line">// <span class="keyword">or</span> <span class="keyword">in</span> one <span class="literal">command</span></span><br><span class="line">git checkout -b develop</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-18.png" alt=""></p>
+<p>When creating a new branch, what Git does is:</p>
+<ul>
+<li><p>Create a new reference named as the branch name in the <strong> .git/refs/heads </strong> directory, which points to the current commit object. In our case,  <strong> .git/refs/heads/develop =&gt; eb2ad539 </strong></p>
+</li>
+<li><p>Flip the .git/HEAD to the new branch name. In our case, <strong> HEAD =&gt; /refs/heads/develop </strong></p>
+</li>
+</ul>
+<p>When switching to an existing branch, Git will:</p>
+<ul>
+<li>Update the index and working tree to the contents of the commit object that the branch points at. In our case, nothing happens since there are no changes.</li>
+</ul>
+<p>So in Git, branches are nothing more than a <strong>variable pointer</strong>, pointing at a certain tip of the commit tree. The same goes for tags, whereas tag is more like a <strong>constant pointer</strong>, recording important historical moments over the project’s history.</p>
+<p>One philosophy of Git is that it advocates branching and merging frequently since they are the killer feature of it, allowing for concurrent development. The following workflow should be used for the development of new features:</p>
+<ul>
+<li><p>Create a new feature branch from the develop branch and do your work there.</p>
+</li>
+<li><p>Commit changes locally, and when it is ready to share, push the changes to upstream.</p>
+</li>
+<li><p>When changes have been tested locally, it is ready to merge it into the develop branch.</p>
+<ul>
+<li><p>Switch to the develop branch.</p>
+</li>
+<li><p>Pull the latest from the upstream.</p>
+</li>
+<li><p>Perform a no fast forward merge with the feature branch and resolve conflicts if any.</p>
+</li>
+<li><p>Push the develop branch to upstream. And when everything is ok, delete the feature both locally and remotely.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>A remote repository <strong>git@gitlab.squarevalleytech.com:demo/object-model.git</strong> was created and let’s add it in our local repository and setup the local master and develop branches to track the corresponding remote ones.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@gitlab<span class="class">.squarevalleytech</span><span class="class">.com</span>:demo/object-model<span class="class">.git</span></span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin develop</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-19.png" alt=""></p>
+<p>Our PM assigned a new requirement about user management functionality and we started to work it out in a new feature branch as follows:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b feature/<span class="built_ins">user</span>-management</span><br><span class="line">echo "This is a fake <span class="built_ins">user</span> manager." &gt; UserManager.js</span><br><span class="line">git <span class="built_ins">add</span> .</span><br><span class="line">git commit -m "<span class="built_ins">add</span> a <span class="built_ins">user</span> manager"</span><br><span class="line">git push -u origin feature/<span class="built_ins">user</span>-management</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-20.png" alt=""></p>
+<p>Our QA found a blocker bug in the testing environment, and needed to be fixed ASAP. For simplicity, we switch back to the develop branch and fix the bug there.</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">git</span> checkout develop</span><br><span class="line"><span class="label">echo</span> <span class="string">"This will fix the bug"</span> &gt;&gt; README</span><br><span class="line"><span class="label">git</span> <span class="keyword">add </span>.</span><br><span class="line"><span class="label">git</span> commit -m <span class="string">"fix bug 1"</span></span><br><span class="line"><span class="label">git</span> <span class="keyword">push </span>origin</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-21.png" alt=""></p>
+<p>From this point on, the user-management feature branch diverged from the develop branch. And we switched back to the feature branch to continue from where we left off.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git checkout feature/user-management</span><br><span class="line">echo <span class="string">"The second line."</span> <span class="prompt">&gt;&gt; </span><span class="constant">UserManager</span>.js</span><br><span class="line">echo <span class="string">"The fake user domain object."</span> <span class="prompt">&gt;&gt; </span><span class="constant">User</span>.js</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"add user"</span></span><br><span class="line">git push origin</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-22.png" alt=""></p>
+<p>Finally, after the new feature passed testing, it was time to merge it back to the develop branch.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git pull origin</span><br><span class="line">git <span class="operator"><span class="keyword">merge</span> feature/<span class="keyword">user</span>-management <span class="comment">--no-ff</span></span><br><span class="line">git push origin</span><br><span class="line">git checkout feature/<span class="keyword">user</span>-management</span><br><span class="line">git push origin :feature/<span class="keyword">user</span>-management</span><br><span class="line">git checkout develop</span><br><span class="line">git branch -d feature/<span class="keyword">user</span>-management</span></span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/A-Successful-GitLab-Workflow-Git-Basics/screenshot-23.png" alt=""></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>In this blog, I will walk you through the detailed steps that are required to setup a successful and efficient Git workflow powered by th]]>
+    <![CDATA[<p>In this blog, I will present you how to setup a successful and efficient Git workflow powered by the modern, excellent open source softwa]]>
     </summary>
     
-      <category term="gitlab" scheme="http://blog.yubeiluo.me/categories/gitlab/"/>
+      <category term="git" scheme="http://blog.yubeiluo.me/categories/git/"/>
     
-      <category term="continuous integration" scheme="http://blog.yubeiluo.me/categories/gitlab/continuous-integration/"/>
+      <category term="gitlab" scheme="http://blog.yubeiluo.me/categories/git/gitlab/"/>
     
-      <category term="continuous delivery" scheme="http://blog.yubeiluo.me/categories/gitlab/continuous-integration/continuous-delivery/"/>
+      <category term="continuous integration" scheme="http://blog.yubeiluo.me/categories/git/gitlab/continuous-integration/"/>
+    
+      <category term="continuous delivery" scheme="http://blog.yubeiluo.me/categories/git/gitlab/continuous-integration/continuous-delivery/"/>
     
   </entry>
   
