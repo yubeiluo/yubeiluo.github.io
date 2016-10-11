@@ -1,0 +1,816 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+
+
+  <meta name="keywords" content="Hexo,next" />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="A passionate coder, footballer and dreamer" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> Lessons-Learned-in-Integrating-Activiti-Using-Zdal // A passionate coder, footballer and dreamer </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">A passionate coder, footballer and dreamer</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            <i class="menu-item-icon icon-categories"></i> <br />
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            Tags
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+<form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'YhsxbtDJ4n8y4FaBsD4g','2.0.0');
+</script>
+
+<div class="site-search-toggle"></div>
+    </div>
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Lessons-Learned-in-Integrating-Activiti-Using-Zdal
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-06-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h1 id="背景介绍">背景介绍</h1><p>由于项目的保密原因, 文中涉及到保密的信息都会以**或者XX进行隐藏, 本文只是从技术的角度对遇到的问题进行记录和讨论.</p>
+<p>在实现一个复杂业务场景的时候通用的做法是</p>
+<ul>
+<li>分而治之，将复杂的东西简单化，抽象出一系列简单的可复用的服务</li>
+<li>将简单的服务组装起来实现业务需求</li>
+</ul>
+<p>上面的思想其实就是unix的哲学之一:</p>
+<ol>
+<li>Write programs that do one thing and do it well.</li>
+<li>Write programs that work together.</li>
+</ol>
+<p>其中第二点中最有名的代表就是unix中的pipe抽象：</p>
+<ul>
+<li>每个程序的输出(stdout)都可以成为另外一个程序的输入(stdin)</li>
+<li>通过pipe把它们自由组合起来解决更加复杂的问题</li>
+</ul>
+<p>一个简单的例子是：统计一个文件的单词的频率，并且按照频率的由高到低进行排列，（为了简单起见，假定该文件的每一行为一个单词）<br>一个可能的命令行如下所示：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat words | sort | uniq -c | sort -nr</span><br></pre></td></tr></table></figure></p>
+<p>可是，当复杂问题不是简单的serial sequence flow而是包含逻辑分支的时候，pipe就显得不够用了。一个简单粗暴的做法就是hard code，可以利用编程语言的<strong>logical and conditional constructs</strong>进行编排，这只适用于业务不复杂并且不易变更的场景。一旦业务变得复杂起来例如包含很多决策分支以及变更频繁，该方法就显得十分拙劣了。对于营销域来讲，业务的变更会比较频繁，涉及的流程也会比较多，并且会包含很多决策分支，因此研究一种更好更优雅的解决方案变得十分必要。经过讨论，营销系统分为核心层和产品层，核心层提供核心的原子性的业务能力，产品层引入流程引擎来做流程的编排服务，实现具体的业务场景。</p>
+<h1 id="Activiti技术攻坚">Activiti技术攻坚</h1><h2 id="背景介绍-1">背景介绍</h2><p>Activiti的创始人Tom Baeyens是在业界老有名气的传统的工作流引擎jBPM的author，他离开JBOSS之后加入了Alfresco公司并很快推出了基于jBPM4的开源工作流系统Activiti。Activiti本身的定位是：</p>
+<p><strong>“Activiti is a light-weight workflow and Business Process Management (BPM) Platform targeted at business people, developers and system admins. It’s core is a super-fast and rock-solid BPMN 2 process engine for Java “</strong></p>
+<h2 id="What">What</h2><p>由于我之前有过使用JBPM工作流引擎的经验，而Activiti可以说是更加优秀的分支版本，为了能够在1.3版本中引入它，需要提前做好技术攻坚工作。</p>
+<h2 id="Why（分库分表原因）">Why（分库分表原因）</h2><ol>
+<li>可靠性 - 可以使用Activiti的内存模式，内存模式存在固有的可靠性风险。一旦发生系统故障例如断电，整个流程必须重新开始，对于非幂等的操作可能会造成不正确的结果。</li>
+<li>高性能 - Activiti默认是单库，存在容量和性能瓶颈，而营销场景需要支持高并发特别是大促之际，进行分库分表就势在必行。而**-jdbc是当仁不让的选择，于是就开启了下面的一段折腾之旅。</li>
+</ol>
+<h2 id="How">How</h2><h3 id="More_About_ClassLoader_Sub-System">More About ClassLoader Sub-System</h3><p>由于在集成的过程了遇到了不少由于classloader引起的问题，在这里想简单的总结下Java中最重要也让人比较困惑的概念—<strong>Classloader</strong>.</p>
+<h4 id="A_high_level_conceptual_view">A high level conceptual view</h4><p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_18.png" alt=""></p>
+<ol>
+<li><p>Java早期是作为客户端的applet出现的，最早的版本是没有classloader这个东西的，后来发现有安全漏洞，然后就引入的classloader，用于做类的安全隔离：在JVM中一个类是由1) 它的classloader 2）它的FQN 唯一定义的</p>
+</li>
+<li><p>Classloader是有层次的，该层次不是interitance hierarchy, 而是delegation hierarchy，在早期的客户端模式中，由于网络的原因，类的加载都是lazy load，并且为了保证不重复加载同样的类，Classloader的加载流程一般都是：</p>
+<ul>
+<li>从parent classloader加载</li>
+<li>如果parent未找到，从本地加载</li>
+</ul>
+</li>
+<li><p>后来发现Java平台更加适合服务器的领域，客户端的那种限制就没有了，这个时候的加载模型一般都是：</p>
+<ul>
+<li>从本地加载</li>
+<li>如果本地未找到，delegate至parent进行加载</li>
+</ul>
+</li>
+<li><p>JVM启动的时候会生成下面的classloader层次：</p>
+<ul>
+<li>bootstrap classloader会加载lang包下的类以及其它运行时需要的基础类</li>
+<li>extension classloader会加载位于java.ext.dirs目录下的jar包</li>
+<li>system classpath classloader会按需加载位于classpath目录列表</li>
+</ul>
+</li>
+</ol>
+<h3 id="Learn_**">Learn **</h3><p>工欲善其事必先利其器，第一步需要完成的就是学习**-jdbc的工作原理，使其成为以后开发工作中的swiss army knife之一。</p>
+<p>当然，我最喜欢的学习方式就是LBD（learn by doing），于是开始尝试在本地搭建一个简单的demo，两个库，每个库两张分表，以此来验证**的正确性。学习的过程主要遇到了下面的问题：</p>
+<ul>
+<li>XXConfigLocal=true，不起作用，观察日志<strong>-client.log,发现它每次都会访问</strong>拉取配置文件，然后覆盖到本地目录~/conf/XX/，所以每次在本地修改后都需要手动的上传到XX配置中心</li>
+</ul>
+<h3 id="Learn_Activiti">Learn Activiti</h3><p>主要是RTFD，阅读Activiti的官方文档，由于之前有过JBPM的使用经验，这一步进展的比较顺利，很快的搭建了一个demo来验证我们最初的设想：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_2.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_3.png" alt=""></p>
+<p>上面两个流程体现了以下的设计思想：</p>
+<ul>
+<li>原子性的公共组件: 其中Get User Info用于调用XX获取会员的信息, Send Award用于调用发奖核心执行发奖逻辑</li>
+<li>组件之间通过Activiti进行流程编排，实现特定的业务场景，不同的业务场景可以共用相同的业务组件，减少编码的工作量</li>
+<li>组件的入参由特定的script task （groovy script）负责进行转换，出参设置到流程的上下文环境，以实现不同组件之间的交互</li>
+</ul>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_1.png" alt=""></p>
+<p>如何产品化的思路:</p>
+<ul>
+<li>提供一系列的核心API，一旦发布出去就必须保持向后的兼容性</li>
+<li>提供组装API的能力，客户可以根据核心API自动组装成满足业务需求的新API</li>
+<li>配置中心进行元数据管理</li>
+<li>提供一系列Composite API, 用于封装常用的业务场景API</li>
+<li>提供客户进行二次开发的能力，由集成团队进行实施.</li>
+</ul>
+<h4 id="Database_Design">Database Design</h4><p>Activiti数据库的表分为五种类型：</p>
+<ol>
+<li><p>通用类型，以GE（General）开头</p>
+<ul>
+<li>ACT_GE_PROPERTY: 以Key-Value形式存储全局的配置性信息，例如当前的schema版本，序列号的值（内置的IdGenerator实现会使用该值生成表的主键ID）</li>
+<li>ACT_GE_BYTEARRAY:   存储二进制数据,例如流程定义的xml以及导出的流程图片、流程变量的序列化二进制数据（<strong>trouble maker之一</strong>）</li>
+</ul>
+</li>
+<li><p>仓储类型，以RE（Repository）开头</p>
+<ul>
+<li>ACT_RE_DEPLOYMENT：存放部署的数据</li>
+<li>ACT_RE_PROCDEF： 存放流程定义的数据</li>
+</ul>
+</li>
+<li><p>身份认证类型，以ID（Identity）开头</p>
+<ul>
+<li>ACT_ID_USER：存放用户数据</li>
+<li>ACT_ID_GROUP：存放用户组数据</li>
+<li>ACT_ID_MEMBERSHIP：存放用户和用户组关系（多对多）的数据</li>
+</ul>
+</li>
+<li><p>运行类型，以RU（runtime）开头</p>
+<ul>
+<li>ACT_RU_EXECUTION：存放流程实例数据</li>
+<li>ACT_RU_IDENTITYLINK</li>
+<li>ACT_RU_VARIABLE：存放流程变量数据</li>
+<li>ACT_RU_TASK：存放流程任务数据（主要用途是实现工作流，任务需要由用户或者用户组来领取和完成）</li>
+<li>ACT_RU_JOB：存放流程job数据</li>
+</ul>
+</li>
+<li><p>历史类型，以HI（History）开头</p>
+<ul>
+<li>ACT_HI_PROCINST</li>
+<li>ACT_HI_TASKINST</li>
+<li>ACT_HI_VARINST</li>
+<li>ACT_HI_IDENTITYLINK</li>
+<li>ACT_HI_DETAIL</li>
+<li>ACT_HI_ATTACHMENT</li>
+<li>ACT_HI_ACTINST</li>
+<li>ACT_HI_COMMENT</li>
+</ul>
+</li>
+</ol>
+<h5 id="High_Level_ER_Model_Diagram">High Level ER Model Diagram</h5><h4 id="Source_Code_Digging">Source Code Digging</h4><p>Demo已经成功的验证了我们的想法，从黑盒的视角使用了Activiti的基本功能，但是由于我们有可能要对它的数据库进行手术，了解它的内部实现就变得很有必要。根据过往的开发经验，所有系统最核心的部分就是数据库的设计，一旦弄清楚了数据库设计以及数据访问逻辑，系统就算了解了一半了。</p>
+<ol>
+<li><p>分析Activiti的持久层，用VP画出的class diagram如下图所示：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_4.png" alt=""></p>
+<ul>
+<li><p>Activiti所有表的ID的生成都是依赖IdGenerator这个接口，其中默认实现使用DbIdGenerator，它会读取表ACT_GE_PROPERTY中key=next.dbid的记录，然后取一定的范围来生成ID，并发量很大的时候会有写入的瓶颈以及ID重复的可能。</p>
+</li>
+<li><p>Activiti提供了和Spring进行集成的组件，并且暴露了dataSource和idGenerator属性可以进行依赖注入，如下图所示</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_5.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_6.png" alt=""></p>
+</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>按照我们的使用场景，可以把Activiti的数据分为两类：一类是配置类型的数据，该数据只在部署流程的时候生成，而流程部署一般属于上线的操作，因此不需要分库分表；还有一类是流水类型的数据，由于需要大规模访问，需要进行分库分表。按照XX同学之白的建议，理想情况的配置是配置两个数据源，一个数据源是最简单的数据源，一个数据源是需要sharding的数据源，但是由于Activiti只暴露了一个数据源，所以我们需要将配置类型的数据和流程类型的数据配置在同一个分库分表数据源中，这个时候就需要利用<a href="http://doc.alipay.net/middleware/zdal/zdal-func/zdal-routing.html" target="_blank" rel="external">XX的数据访问路由机制</a>来达到下面的目的：</p>
+<ol>
+<li>所有对配置数据的访问路由到XX_00库，ACT_XX_000表</li>
+<li>所有对流水数据的访问按照路由规则进行正常的分库分表路由</li>
+</ol>
+<p>为了实现上面的第一个要求，只有通过XX数据访问路由实现之一的DBSelectorIDRouteCondition来实现，而且必须修改Activiti的源代码才可以做到! To be honest, this is the last thing we want to do :(. 修改源代码确实有风险，测试同学肯定会跳出来反对，让我们三思而行的，可是只要我们知道修改的原因并做到风险可控即可（Don’t worry, we know what we are doing!）</p>
+</li>
+</ol>
+<h3 id="Problems_Encountered">Problems Encountered</h3><h4 id="XX’s_DatabaseMetaData">XX’s DatabaseMetaData</h4><p>在修改代码之前，谈谈遇到的一个XX的问题 - <strong>XX的JDBC实现不完整，其中DatabaseMetaData接口大部分都没有实现</strong>。</p>
+<h5 id="场景复现">场景复现</h5><p>在集成spring自动化部署流程的时候，Activiti在执行初始化的时候，会做一个自检，该自检需要检查流程表（ACT_RU_EXECUTION）是否存在，这个时候调用了DatabaseMetaData对象的接口进行查询，调用代码和ZDAL的实现ZDatabaseMetaData如下所示：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_7.png" alt=""></p>
+<p>和XX同学之白沟通后，他认为对于分库分表数据源来讲：<br>1.接口有二义性</p>
+<p>2.没有调用需求</p>
+<p>我的观点是XX数据源最好能够实现该接口，保持一致性，因为对于内部的系统，我们可以限制不要使用相关的API，对于外部的系统，things are simply out of our own control.</p>
+<h5 id="Solution">Solution</h5><p>修改源代码，跳过该验证，由于我们能够确保运行时该表是存在的，所以验证是可以跳过的。</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_8.png" alt=""></p>
+<p>当然，更好的做法是与Activiti development team进行沟通讨论看能否把上面的sanity check功能做成可配置化的一个开关，如果不需要<br>该验证的话直接通过配置就可以关闭，由于时间有限就没有进行了，后续可以考虑和他们建立起联系。</p>
+<h4 id="设置配置表的数据路由">设置配置表的数据路由</h4><p>我们需要使用的配置表有：</p>
+<ol>
+<li>ACT_GE_PROPERTY</li>
+<li>ACT_RE_DEPLOYMENT</li>
+<li>ACT_RE_PROCDEF</li>
+<li>ACT_GE_BYTEARRAY</li>
+</ol>
+<p>第一个要解决的问题是配置表的路由问题，需要修改Activiti的数据库访问层，在访问上面的表之前添加好数据路由逻辑。以ProcessDefinitionEntityManager为例，在执行数据库访问之前都要添加路由访问规则：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_9.png" alt=""></p>
+<p>还有个需要修改的地方是对上面表插入数据的时候，由于插入操作是由DbSqlSession来进行统一处理的，我们也需要添加相应的规则. 数据的插入分为两种，一种是Regular Insert即单条记录插入，一种是Bulk Insert即批量插入：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_10.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_11.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_12.png" alt=""></p>
+<h4 id="XX不支持BLOB数据的插入">XX不支持BLOB数据的插入</h4><p>Activiti中每个流程都是定义在后缀名为<strong>bpmn的XML文件</strong>, Activiti提供的Designer插件能够对其进行可视化的编辑。</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_13.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_14.png" alt=""></p>
+<p>Activiti在进行流程部署的时候，会保存流程对应的定义即XML文件，以及通过该XML文件生成的流程图片。而该文件是保存在表<strong>ACT_GE_BYTEARRAY</strong>的字段<strong>BYTES_</strong>中，该字段的类型为BLOB，有下图为证：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_15.png" alt=""></p>
+<p>测试的时候发现，保存流程定义的时候报错，错误为<strong>Caused by: java.lang.ArrayIndexOutOfBoundsException: 2</strong>，经过追踪执行过程后发现，是XX本身的bug导致二进制数据保存失败，如下图所示：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_16.png" alt=""></p>
+<p>和XX同学进行沟通之后，在XX平台报告了问题,XX同学会对尽快对其进行修复。</p>
+<p>由于该问题属于blocker，在XX同学发布修复之前我们需要在本地自己修复掉该bug，否则技术攻坚工作就没法继续进行。因此就开始了在本地手动修改XX-client源代码的实验，万万没想到，本来以为很简单的事情确掉入了另外一个坑之中。</p>
+<p>要修改的代码很简单，如下所示：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_17.png" alt=""></p>
+<p>像修改Activiti源代码一样，手动的进行编译、打包、替换，运行的时候确发现上面的错误总是存在，通过断点追踪发现自己的修改根本没有起任何作用。寻思折腾良久，百思不得其解，后来突然想到有可能是ClassLoader引起的问题。被替换掉的jar包位于/Users/david/.m2/repository/XX, 既然没有生效那么只有一个可能就是运行时被加载的代码位于其他地方，而我又想到XX是通过ClassLoader来实现Bundle之间的上下文隔离的（其实是基于equinox框架，而equinox是OSGI的一个实现），通过追踪它的ClassLoader的加载过程，发现它从XX目录下的jar包进行加载，当把修改后的XX.jar拷贝到该目录之后，问题就消失了.</p>
+<h4 id="实现IdGenerator">实现IdGenerator</h4><p>在Activiti的设计中，IdGenerator用于负责所有实体的主键ID生成，它的定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * generates &#123;<span class="doctag">@link</span> IdBlock&#125;s that are used to assign ids to new objects.</span><br><span class="line"> *</span><br><span class="line"> * The scope of an instance of this class is process engine,</span><br><span class="line"> * which means that there is only one instance in one process engine instance.</span><br><span class="line"> *</span><br><span class="line"> * <span class="doctag">@author</span> Tom Baeyens</span><br><span class="line"> * <span class="doctag">@author</span> Joram Barrez</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IdGenerator</span> </span>&#123;</span><br><span class="line">  <span class="function">String <span class="title">getNextId</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于我们把它的实体分为配置数据和流水数据两大类，对于配置类型的数据我们可以使用它的<strong>StrongUuidGenerator</strong>实现类来生成uuid作为主键使用。对于流水数据我们需要根据外部的流水号利用ZDAL-Sequence组件来生成全局唯一的主键ID，因此该接口需要感知被服务的实体对象，修改的接口如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IdGenerator</span> </span>&#123;</span><br><span class="line">  <span class="function">String <span class="title">getNextId</span><span class="params">(PersistentObject persistentObject)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时搜索引用到它的地方，进行相应的修改。外部调用的时候需要传入外部流水号，因此设计了下面的接口和实现类：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_19.png" alt=""></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_20.png" alt=""></p>
+<h4 id="java-lang-NoSuchMethodError:_org-slf4j-Logger-trace(Ljava/lang/String;Ljava/lang/Object;)V">java.lang.NoSuchMethodError: org.slf4j.Logger.trace(Ljava/lang/String;Ljava/lang/Object;)V</h4><p>在Eclipse IDE中执行测试用例的时候发现报下面的错误：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_21.png" alt=""></p>
+<p>原因的本质还是classloader的问题，因为Activiti引用的slf4j的版本是<strong>1.7.6</strong>, 我看了下它的源代码是Logger接口是包含trace方法的，<br>那只有一个原因是加载了老的版本，该版本不包含上面的trace方法，导致NoSuchMethod的error。后来发现XX自动引入的版本是1.3.0，并且会优先加载。</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_22.png" alt=""></p>
+<h5 id="Solution-1">Solution</h5><p>JVM的system classloader加载类的时候会去从classpath指定的目录列表进行顺序加载，所以可以通过把新版本的slf4j放到classpath的前面让新版本的优先加载。</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_23.png" alt=""></p>
+<p>经验证，通过部署的方式运行即调用<strong>s run</strong>不存在该问题.</p>
+<h4 id="又一个Classloader引发的血案">又一个Classloader引发的血案</h4><p>Activiti的Task有很多类型，其中一种比较常见的是Service Task，这也是Activiti和外部进行集成的地方，并且可以通过UEL（unified expression language）调用Spring上下文中指定bean的指定方法。但是在测试的时候发现会报下面的错误:</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_24.png" alt=""></p>
+<p>当时头都大了，以为是什么严重的错误，后来通过debug发现罪魁祸首还是classloader导致的：“抽象类ExpressionFactory的classloader和通过反射生成的实现类的classloader不一样”。其中org.activiti.engine.impl.javax.el.ExpressionFactory类的class loader为com.alipay.cloudengine.extensions.equinox.KernelAceClassLoader@336206d8：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_25.png" alt=""></p>
+<p>ExpressFactory类在生成实现类的时候会使用反射来加载：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_26.png" alt=""></p>
+<p>其中生成的类clazz是通过其他的system classpath classloader进行加载的:</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_27.png" alt=""></p>
+<p>导致ExpressionFactory.class.isAssignableFrom(clazz)返回false，从而导致错误。</p>
+<h5 id="solution">solution</h5><p>ExpressionFactory类是通过反射对生成实现类进行加载，加载的过程会首先获取ProcessEngineConfigurationImpl对象的classloader属性作为首选的classloader进行加载，如果该classloader为null，则会使用当前线程的context classloader（该classload为system classpath classloader）。而ProcessEngineConfigurationImpl对象的classloader属性可以通过Spring进行注入，默认为null。修改后的逻辑如下所示：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_28.png" alt=""></p>
+<h4 id="配置表和流水表进行join">配置表和流水表进行join</h4><p>在实现从断点恢复流程执行的时候，默认使用了Activiti提供的Query API进行查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RuntimeService runtimeService = processEngine.getRuntimeService();</span><br><span class="line">       Execution execution = runtimeService.createExecutionQuery().executionId(executionId)</span><br><span class="line">           .singleResult();</span><br></pre></td></tr></table></figure>
+<p>结果发现生成的sql会执行inner join查询，问题是该join参与的两张表一张是流水表<strong>ACT_RU_EXECUTION</strong>，一张是配置表<strong>ACT_RE_PROCDEF</strong>，导致出错。</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_30.png" alt=""></p>
+<h5 id="Solution-2">Solution</h5><p>使用Activiti内部的Command设计，封装一个Command用于查询Execution，调用CommandExecutor接口：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_31.png" alt=""></p>
+<h4 id="跨库事务">跨库事务</h4><p>每个流程都可以关联多个流程变量，当流程变量的类型为复杂类型例如Map,或者用户自定义类型的时候，流程变量的值默认会保存在表ACT_GE_BYTEARRAY，而由于该表是配置表，这样当流程数据对应的流水分表和ACT_GE_BYTEARRAY表不在同一个库里面就会导致跨库事务的问题，而XX目前不支持跨库的事务，详情请参加<a href="http://baike.inc.alipay.net/index.html#/question/3238?_k=h3fqef" target="_blank" rel="external">错误</a></p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_32.png" alt=""></p>
+<h5 id="Solution-3">Solution</h5><p>Activiti提供了定制化流程变量序列化的接口，默认使用JVM自身的序列化机制，该机制本身就有不少问题，例如兼容性,效率. 可以定制化自己的序列化方案—JSON存储流程变量：</p>
+<ol>
+<li>序列化的时候要保存类的信息，这样在反序列化的时候才能通过反射生成对应类的实例</li>
+<li>JSON字符串直接存储于流程变量表的text字段，避免了跨库的事务</li>
+</ol>
+<p>实现类如下：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_33.png" alt=""></p>
+<p>相关的Spring配置如下：</p>
+<p><img src="/uploads/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/screenshot_34.png" alt=""></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/13/大话Javascript的promise/">大话Javascript的promise</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/"
+               data-title="Lessons-Learned-in-Integrating-Activiti-Using-Zdal" data-url="http://blog.yubeiluo.me/2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="David Yu" />
+          <p class="site-author-name">David Yu</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml">
+              <i class="menu-item-icon icon-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/yubeiluo" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="https://twitter.com/yubeiluo" target="_blank">twitter</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/yubeiluo" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.douban.com/people/yubeiluo" target="_blank">douban</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/yubeiluo" target="_blank">zhihu</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+        
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Activiti技术攻坚"><span class="nav-number">2.</span> <span class="nav-text">Activiti技术攻坚</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍-1"><span class="nav-number">2.1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What"><span class="nav-number">2.2.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why（分库分表原因）"><span class="nav-number">2.3.</span> <span class="nav-text">Why（分库分表原因）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How"><span class="nav-number">2.4.</span> <span class="nav-text">How</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#More_About_ClassLoader_Sub-System"><span class="nav-number">2.4.1.</span> <span class="nav-text">More About ClassLoader Sub-System</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A_high_level_conceptual_view"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">A high level conceptual view</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learn_**"><span class="nav-number">2.4.2.</span> <span class="nav-text">Learn **</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Learn_Activiti"><span class="nav-number">2.4.3.</span> <span class="nav-text">Learn Activiti</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Database_Design"><span class="nav-number">2.4.3.1.</span> <span class="nav-text">Database Design</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#High_Level_ER_Model_Diagram"><span class="nav-number">2.4.3.1.1.</span> <span class="nav-text">High Level ER Model Diagram</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Source_Code_Digging"><span class="nav-number">2.4.3.2.</span> <span class="nav-text">Source Code Digging</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Problems_Encountered"><span class="nav-number">2.4.4.</span> <span class="nav-text">Problems Encountered</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XX’s_DatabaseMetaData"><span class="nav-number">2.4.4.1.</span> <span class="nav-text">XX’s DatabaseMetaData</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景复现"><span class="nav-number">2.4.4.1.1.</span> <span class="nav-text">场景复现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Solution"><span class="nav-number">2.4.4.1.2.</span> <span class="nav-text">Solution</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置配置表的数据路由"><span class="nav-number">2.4.4.2.</span> <span class="nav-text">设置配置表的数据路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XX不支持BLOB数据的插入"><span class="nav-number">2.4.4.3.</span> <span class="nav-text">XX不支持BLOB数据的插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现IdGenerator"><span class="nav-number">2.4.4.4.</span> <span class="nav-text">实现IdGenerator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java-lang-NoSuchMethodError:_org-slf4j-Logger-trace(Ljava/lang/String;Ljava/lang/Object;)V"><span class="nav-number">2.4.4.5.</span> <span class="nav-text">java.lang.NoSuchMethodError: org.slf4j.Logger.trace(Ljava/lang/String;Ljava/lang/Object;)V</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Solution-1"><span class="nav-number">2.4.4.5.1.</span> <span class="nav-text">Solution</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#又一个Classloader引发的血案"><span class="nav-number">2.4.4.6.</span> <span class="nav-text">又一个Classloader引发的血案</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#solution"><span class="nav-number">2.4.4.6.1.</span> <span class="nav-text">solution</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置表和流水表进行join"><span class="nav-number">2.4.4.7.</span> <span class="nav-text">配置表和流水表进行join</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Solution-2"><span class="nav-number">2.4.4.7.1.</span> <span class="nav-text">Solution</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨库事务"><span class="nav-number">2.4.4.8.</span> <span class="nav-text">跨库事务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Solution-3"><span class="nav-number">2.4.4.8.1.</span> <span class="nav-text">Solution</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2015 - 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">David Yu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yubeiluo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+</body>
+</html>

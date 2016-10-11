@@ -16,7 +16,6 @@
 
 
 
-  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 
 <link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
@@ -219,7 +218,7 @@
 <p>让我们首先来看看Javascript的工作模型 - <strong>基于事件回调机制的异步编程模型</strong>。JS天生就是异步的！</p>
 <p>如果上面的话让你感到迷惑，不妨细心思考下人们自身的工作模式。你会惊讶的发现”JS和人们的工作方式是如此的一致- 一次只能同时处理一件事情！”</p>
 <p>而现实的世界确并非如此，许多事情可以同时发生，例如你在客厅看书和厨房的水正在烧着这两件事情是可以并行发生的。</p>
-<p>当水烧开的时候，水壶会发出警告声，当警告声想起的时候，你会停止看书，然后去处理已经烧开了的水，把水倒进水瓶，给自己倒一杯热茶，然后在继续进行看书。</p>
+<p>当水烧开的时候，水壶会发出警告声，当警告声响起的时候，你会停止看书，然后去处理已经烧开了的水，把水倒进水瓶，给自己倒一杯热茶，然后在继续进行看书。</p>
 <p>上面的过程用JS来表示就是：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> EventEmitter = <span class="built_in">require</span>(<span class="string">'events'</span>).EventEmitter</span><br><span class="line">  , waterBoiler = <span class="keyword">new</span> EventEmitter();  <span class="comment">// 代表水壶，水壶本身可以生成事件例如水开的事件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 表示读书的过程</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readBook</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'读书中'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setInterval(readBook, <span class="number">1000</span>); <span class="comment">// 模拟读书的过程,每秒执行readBook过程</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册异步回调处理水烧开的事件</span></span><br><span class="line">waterBoiler.on(<span class="string">'boiled'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'水已经烧开了'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟水开的事件,10s后触发</span></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  waterBoiler.emit(<span class="string">'boiled'</span>);</span><br><span class="line">&#125;, <span class="number">10</span> * <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
 <p>程序的输出如下：</p>
@@ -257,6 +256,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/">Lessons-Learned-in-Integrating-Activiti-Using-Zdal</a>
             
           </div>
 
@@ -330,7 +331,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
