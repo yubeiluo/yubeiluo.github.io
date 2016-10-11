@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.yubeiluo.me//"/>
-  <updated>2016-10-11T08:37:22.000Z</updated>
+  <updated>2016-10-11T08:42:08.000Z</updated>
   <id>http://blog.yubeiluo.me//</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[Lessons-Learned-in-Integrating-Activiti-Using-Zdal]]></title>
-    <link href="http://blog.yubeiluo.me/2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/"/>
-    <id>http://blog.yubeiluo.me/2016/06/07/Lessons-Learned-in-Integrating-Activiti-Using-Zdal/</id>
+    <title><![CDATA[Lessons-Learned-in-Scaling-Activiti]]></title>
+    <link href="http://blog.yubeiluo.me/2016/06/07/Lessons-Learned-in-Scaling-Activiti/"/>
+    <id>http://blog.yubeiluo.me/2016/06/07/Lessons-Learned-in-Scaling-Activiti/</id>
     <published>2016-06-07T09:21:15.000Z</published>
-    <updated>2016-10-11T08:37:22.000Z</updated>
+    <updated>2016-10-11T08:42:08.000Z</updated>
     <content type="html"><![CDATA[<h1 id="背景介绍">背景介绍</h1><p>由于项目的保密原因, 文中涉及到保密的信息都会以**或者XX进行隐藏, 本文只是从技术的角度对遇到的问题进行记录和讨论.</p>
 <p>在实现一个复杂业务场景的时候通用的做法是</p>
 <ul>
