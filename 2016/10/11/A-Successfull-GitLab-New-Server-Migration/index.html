@@ -48,7 +48,7 @@
 
 
 
-  <title> Use Css After Psuedo Element To Center Play Icon // A passionate coder, footballer and dreamer </title>
+  <title> A-Successfull-GitLab-New-Server-Migration // A passionate coder, footballer and dreamer </title>
 </head>
 
 <body>
@@ -169,7 +169,7 @@
           
           
             
-              Use Css After Psuedo Element To Center Play Icon
+              A-Successfull-GitLab-New-Server-Migration
             
           
         </h1>
@@ -177,14 +177,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-07-08
+          Posted on 2016-10-11
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/css/">css</a>
+              <a href="/categories/gitlab/">gitlab</a>
 
               
               
@@ -197,8 +197,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/"></span>
+            <a href="/2016/10/11/A-Successfull-GitLab-New-Server-Migration/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/11/A-Successfull-GitLab-New-Server-Migration/"></span>
             </a>
           </span>
           
@@ -212,70 +212,40 @@
       
 
       
-        <p>Today, I would like to share with you some css tricks that were discovered and learned in my own project, where they were employed to place a play icon in the middle of an image.</p>
-<h1 id="Background">Background</h1><p>During my recent development of a web ui for managing the post library (user can see the list and perform actions on each of them), it is needed to render the UI based on the post type. For the post with attached video, it is required to display the <strong>play</strong> icon in the center of the video snapshot image that could be simply clicked by the user to play the video.</p>
-<h1 id="Desired_Effect">Desired Effect</h1><p>One picture is worth than thousands words and here comes the snapshot.</p>
-<p><img src="/uploads/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/snapshot-1.png" alt=""></p>
-<h1 id="Tricky_Things">Tricky Things</h1><p>In order to achieve the wanted functionality, it was not an easy task for me since I just re-picked up the web tech stack two months ago due to lack of labor and lots of stuff has changed dramatically.</p>
-<p>The most unpleasant issue I feel with front-end development is the enormous details that one has to take care of, such as the gigantic css rules. And it is very likely to forget the technique that was previously used.</p>
-<p>Next, I will talk about the facts and findings that were learned.</p>
-<h2 id="CSS_Positions">CSS Positions</h2><p>There are four possible values for the css <strong>position</strong> property per the below table.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">static</td>
-<td>the default value</td>
-</tr>
-<tr>
-<td style="text-align:left">relative</td>
-<td>relative to the original position and will stay in the normal document structure</td>
-</tr>
-<tr>
-<td style="text-align:left">absolute</td>
-<td>relative to the first positioned parent element and will be removed from the document structure</td>
-</tr>
-<tr>
-<td style="text-align:left">fixed</td>
-<td>relative to the viewport and will stay in the normal document structure</td>
-</tr>
-</tbody>
-</table>
-<p>Please be noted that when positioned as absolute, the following statements hold true:</p>
+        <p>In this blog, I will show you how to migrate and upgrade an existing GitLab instance to a different VPS provider from a real practice with tips and lessons learned.</p>
+<h1 id="Problems">Problems</h1><p>A graph is worth than 10K words, right?!</p>
+<p><img src="/uploads/A-Successfull-GitLab-New-Server-Migration/gitlab_migration_existing_topology.png" alt=""></p>
+<h1 id="Goals">Goals</h1><p>To tackle those aforementioned problems, the following goals are in our top priorities:</p>
 <ol>
-<li><p>The element will become an inline-block element and its width and height will auto-adjust to the contained elements.</p>
+<li><p>Speeding up developers’ GitLab access by relocating the GitLab server to a nearer geographical location. As of now, we have no choice but to choose the <strong>mediocre AliYun</strong> as our cloud provider for the testing environment. Hopefully, AWS could show its presence in the mainland china asap.</p>
 </li>
-<li><p>The parent element will not any reserve space for it and therefore overlapping could occur.</p>
-</li>
-<li><p>The element will be positioned relative to the first positioned parent element that has the position property set to a value other than <strong>static</strong></p>
+<li><p>Reducing the time taken for Canary environment deployment, which is intensively used by the QA fellas.</p>
 </li>
 </ol>
-<h2 id="Pseudo_Elements">Pseudo Elements</h2><p>What the hell are them? You may wonder the same as I did the first time when I heard the words. Actually, they are basically css rules like <strong>a:after,a:before</strong> that can 1) add more flexibility than plain javascript 2) remove unnecessary html code. Here are some facts to bear in mind.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="rule"><span class="attribute">a</span>:<span class="value">before&#123;</span><br><span class="line">  display: block</span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">  <span class="rule"><span class="attribute">content</span>:<span class="value"><span class="string">"the content will be inserted before the a's content"</span></span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<ol>
-<li><p>They do not appear in the DOM and are rendered by the css renderer. Henceforth, it is not possible to manipulate them via javascript.</p>
+<h1 id="How">How</h1><ol>
+<li><p>Installing GitLab software with the identical version 8.3.2-ce.0 in a newly purchased server located in <strong>AliYun HZ</strong>.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install curl openssh-server ca-certificates</span><br><span class="line">curl <span class="operator">-s</span>S https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash</span><br><span class="line">sudo apt-get install gitlab-ce=<span class="number">8.3</span>.<span class="number">2</span>-ce.<span class="number">0</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>The content property <strong>CAN NOT</strong> be missing.</p>
+<li><p>Performing a backup operation in the old running GitLab instance. The backup task will dump the data of all the existing databases, repositories, uploads, builds, artifacts, lsf objects.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rake gitlab:backup:create</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>The default display value is inline and can be modified to suit your needs.</p>
+<li><p>Transferring the backup tar file from the old server to the new server.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br><span class="line"><span class="comment"># alternatively, use the following command for continuous transfer.</span></span><br><span class="line">rsync -P --rsh=ssh <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Restoring the transferred backup in the new server.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=<span class="number">1476097480</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>In order to allow existing users to access the new server, we need to transfer serval configuration files as well.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># in the old server</span></span><br><span class="line">scp /etc/gitlab/gitlab.rb root@&#123;new_server&#125;:/etc/gitlab</span><br><span class="line">scp /etc/gitlab/gitlab-secrets.json root@&#123;new_server&#125;:/etc/gitlab</span><br><span class="line"><span class="comment"># when configuration changes, a reconfigure operation is required</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Updating the new gitlab instance to the latest version.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># thanks to the omnibus package, the update becomes dead simple.</span></span><br><span class="line">sudo apt-get install gitlab-ce</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Flipping the gitlab domain to the newly equipped server address.</p>
 </li>
 </ol>
-<h1 id="The_Solution">The Solution</h1><p>Okay, it is time to put all the pieces together to have the whole picture.</p>
-<p>First, the html markup:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"my-video-content"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">img</span> <span class="attribute">ng-src</span>=<span class="value">"&#123;&#123;feed.video.thumbnailUrl&#125;&#125;"</span> <span class="attribute">alt</span>=<span class="value">""</span> <span class="attribute">class</span>=<span class="value">"img-thumbnail"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">ng-click</span>=<span class="value">"playVideo(feed)"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>Secondly, the css styles:<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class">.my-video-content</span> <span class="rules">&#123;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">display</span>:<span class="value"> inline-block</span></span>;</span><br><span class="line">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="class">.my-video-content</span> <span class="rule"><span class="attribute">a</span>:<span class="value">after &#123;</span><br><span class="line">	font-family: <span class="string">"Glyphicons Halflings"</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">-webkit-font-smoothing</span>:<span class="value"> antialiased</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\e029"</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">40px</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">50%</span></span></span>;</span><br><span class="line">	<span class="rule"><span class="attribute">margin</span>:<span class="value"> -<span class="number">20px</span> <span class="number">0</span> <span class="number">0</span> -<span class="number">20px</span></span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="Explanation">Explanation</h2><ol>
-<li><p>The dimension of the video snapshot image is dynamic, so we need to have a container to have its width auto-adjust to that of the enclosed image. By default, the width of a div container will flow to 100% of its parent’s width and that is exactly where <strong>display=inline-block</strong> came to the rescue.</p>
-</li>
-<li><p>The <strong>.my-video-content a:after</strong> element is now positioned relative to the <strong>.my-video-content</strong> container and we also need to set both the top and left to 50% so that the left corner of the icon box is sitting in the middle of the image.</p>
-</li>
-<li><p>The goal is to center the icon box not the left corner, so we need to offset both the top and left margin to half of the icon’s height and width.</p>
-</li>
-</ol>
-<h1 id="Conclusion">Conclusion</h1><p>Hopefully, the above tips could come to help and inspire your own development and please do not hesitate to correct me if anything I wrote above is wrong.</p>
+<h2 id="Caveats">Caveats</h2><h3 id="Continuous_Network_File_Transfer">Continuous Network File Transfer</h3><p>Per my experience, the above step 3 took the longest time since the network connection between the two servers is not that fast due to the bandwidth limit imposed on the Ali Yun Box. The average transfer speed hit around 90K/s and it cost more than one hour to complete the transfer of the backup tar file with the size of 763MB. So what if network goes down at the end of the transfer? To start it all over again? No way! So to play it safer, do consider using the following command which has the feature of continuous transfer enabled:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -P --rsh=ssh <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br></pre></td></tr></table></figure></p>
+<h3 id="SSH_Client_-_Known_Host_Change">SSH Client - Known Host Change</h3><p>After the domain has changed its target ip address, ssh clients will be effected. This is due to the fact that the ~/.ssh/known_hosts file contains an stale entry regarding the domain since the fingerprint has changed, thus ssh client complains about it. There are two approaches to fix it and retry afterwards: either 1) manually delete the corresponding entry from the file or 2) run the command for automatic removal of the entry <strong>ssh-keygen -f “/home/gitlab-runner/.ssh/known_hosts” -R {domain}</strong></p>
 
       
     </div>
@@ -287,13 +257,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/08/14/Lessons-Learned-Transition-to-Frontend/">Lessons-Learned-Transition-to-Frontend</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/06/29/Winston-Rolling-File-Appender/">Winston Rolling File Appender</a>
+              <a href="/2016/06/07/Lessons-Learned-in-Scaling-Activiti/">Lessons-Learned-in-Scaling-Activiti</a>
             
           </div>
         </div>
@@ -313,8 +281,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/"
-               data-title="Use Css After Psuedo Element To Center Play Icon" data-url="http://blog.yubeiluo.me/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/">
+          <div class="ds-thread" data-thread-key="2016/10/11/A-Successfull-GitLab-New-Server-Migration/"
+               data-title="A-Successfull-GitLab-New-Server-Migration" data-url="http://blog.yubeiluo.me/2016/10/11/A-Successfull-GitLab-New-Server-Migration/">
           </div>
         
       </div>
@@ -432,7 +400,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Desired_Effect"><span class="nav-number">2.</span> <span class="nav-text">Desired Effect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tricky_Things"><span class="nav-number">3.</span> <span class="nav-text">Tricky Things</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS_Positions"><span class="nav-number">3.1.</span> <span class="nav-text">CSS Positions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pseudo_Elements"><span class="nav-number">3.2.</span> <span class="nav-text">Pseudo Elements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The_Solution"><span class="nav-number">4.</span> <span class="nav-text">The Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Explanation"><span class="nav-number">4.1.</span> <span class="nav-text">Explanation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">5.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problems"><span class="nav-number">1.</span> <span class="nav-text">Problems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Goals"><span class="nav-number">2.</span> <span class="nav-text">Goals</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How"><span class="nav-number">3.</span> <span class="nav-text">How</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Caveats"><span class="nav-number">3.1.</span> <span class="nav-text">Caveats</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Continuous_Network_File_Transfer"><span class="nav-number">3.1.1.</span> <span class="nav-text">Continuous Network File Transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH_Client_-_Known_Host_Change"><span class="nav-number">3.1.2.</span> <span class="nav-text">SSH Client - Known Host Change</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

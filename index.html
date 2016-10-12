@@ -171,6 +171,116 @@
           
           
             
+              <a class="post-title-link" href="/2016/10/11/A-Successfull-GitLab-New-Server-Migration/">
+                A-Successfull-GitLab-New-Server-Migration
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-10-11
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/gitlab/">gitlab</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/10/11/A-Successfull-GitLab-New-Server-Migration/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/11/A-Successfull-GitLab-New-Server-Migration/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>In this blog, I will show you how to migrate and upgrade an existing GitLab instance to a different VPS provider from a real practice with tips and lessons learned.</p>
+<h1 id="Problems">Problems</h1><p>A graph is worth than 10K words, right?!</p>
+<p><img src="/uploads/A-Successfull-GitLab-New-Server-Migration/gitlab_migration_existing_topology.png" alt=""></p>
+<h1 id="Goals">Goals</h1><p>To tackle those aforementioned problems, the following goals are in our top priorities:</p>
+<ol>
+<li><p>Speeding up developers’ GitLab access by relocating the GitLab server to a nearer geographical location. As of now, we have no choice but to choose the <strong>mediocre AliYun</strong> as our cloud provider for the testing environment. Hopefully, AWS could show its presence in the mainland china asap.</p>
+</li>
+<li><p>Reducing the time taken for Canary environment deployment, which is intensively used by the QA fellas.</p>
+</li>
+</ol>
+<h1 id="How">How</h1><ol>
+<li><p>Installing GitLab software with the identical version 8.3.2-ce.0 in a newly purchased server located in <strong>AliYun HZ</strong>.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install curl openssh-server ca-certificates</span><br><span class="line">curl <span class="operator">-s</span>S https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash</span><br><span class="line">sudo apt-get install gitlab-ce=<span class="number">8.3</span>.<span class="number">2</span>-ce.<span class="number">0</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Performing a backup operation in the old running GitLab instance. The backup task will dump the data of all the existing databases, repositories, uploads, builds, artifacts, lsf objects.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rake gitlab:backup:create</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Transferring the backup tar file from the old server to the new server.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br><span class="line"><span class="comment"># alternatively, use the following command for continuous transfer.</span></span><br><span class="line">rsync -P --rsh=ssh <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Restoring the transferred backup in the new server.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=<span class="number">1476097480</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>In order to allow existing users to access the new server, we need to transfer serval configuration files as well.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># in the old server</span></span><br><span class="line">scp /etc/gitlab/gitlab.rb root@&#123;new_server&#125;:/etc/gitlab</span><br><span class="line">scp /etc/gitlab/gitlab-secrets.json root@&#123;new_server&#125;:/etc/gitlab</span><br><span class="line"><span class="comment"># when configuration changes, a reconfigure operation is required</span></span><br><span class="line">sudo gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Updating the new gitlab instance to the latest version.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># thanks to the omnibus package, the update becomes dead simple.</span></span><br><span class="line">sudo apt-get install gitlab-ce</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Flipping the gitlab domain to the newly equipped server address.</p>
+</li>
+</ol>
+<h2 id="Caveats">Caveats</h2><h3 id="Continuous_Network_File_Transfer">Continuous Network File Transfer</h3><p>Per my experience, the above step 3 took the longest time since the network connection between the two servers is not that fast due to the bandwidth limit imposed on the Ali Yun Box. The average transfer speed hit around 90K/s and it cost more than one hour to complete the transfer of the backup tar file with the size of 763MB. So what if network goes down at the end of the transfer? To start it all over again? No way! So to play it safer, do consider using the following command which has the feature of continuous transfer enabled:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -P --rsh=ssh <span class="number">1476097480</span>_gitlab_backup.tar root@&#123;new_server&#125;:/var/opt/gitlab/backups</span><br></pre></td></tr></table></figure></p>
+<h3 id="SSH_Client_-_Known_Host_Change">SSH Client - Known Host Change</h3><p>After the domain has changed its target ip address, ssh clients will be effected. This is due to the fact that the ~/.ssh/known_hosts file contains an stale entry regarding the domain since the fingerprint has changed, thus ssh client complains about it. There are two approaches to fix it and retry afterwards: either 1) manually delete the corresponding entry from the file or 2) run the command for automatic removal of the entry <strong>ssh-keygen -f “/home/gitlab-runner/.ssh/known_hosts” -R {domain}</strong></p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2016/06/07/Lessons-Learned-in-Scaling-Activiti/">
                 Lessons-Learned-in-Scaling-Activiti
               </a>
@@ -1440,14 +1550,14 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
