@@ -171,6 +171,156 @@
           
           
             
+              <a class="post-title-link" href="/2016/11/17/How-to-Expunge-Large-Binary-File-from-Git-Repository/">
+                How-to-Expunge-Large-Binary-File-from-Git-Repository
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2016-11-17
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/git/">git</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/11/17/How-to-Expunge-Large-Binary-File-from-Git-Repository/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/17/How-to-Expunge-Large-Binary-File-from-Git-Repository/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h1 id="Background">Background</h1><p>In my current project, due to historical reasons, Ant was once used as the build tool, and inevitably, all the dependencies were manually managed by ourselves: storing them in the repo, writing build scripts in a procedural way,etc.</p>
+<p>Recently, some time were invested in refactoring the project to make a switch to Maven. After a successfully switch, the projects now look more shiny and normed. However, one problem that gets on my nerve still lingers, which is inherent in every Git repository - “the size of a Git repository will simply keep growing forever with commits being made as time elapses even if files are deleted later”. This is because once a file is tracked and committed to Git, it then becomes the history of the project and history,by its literal meaning, could not be simply changed unless you are aware what you are doing.</p>
+<p>From the storage perspective, there are two types of objects: loose object or packed object. A loose object sits in its own file under the .git/objects directory and a packed one lives in the pack file <strong>.git/objects/pack/XXXX.pack</strong>.</p>
+<p>During the operation of <strong>git clone</strong>, it is the pack file that accounts for the majority of network traffic from the server to the client.</p>
+<h1 id="Goals">Goals</h1><p>For my project, the directories in the following table are held accountable for the over-used storage:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Directory</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">server/lib</td>
+<td style="text-align:left">the third party jars</td>
+</tr>
+<tr>
+<td style="text-align:left">server/source-lib</td>
+<td style="text-align:left">the third party source jars</td>
+</tr>
+<tr>
+<td style="text-align:left">server/test-lib</td>
+<td style="text-align:left">the third party test jars</td>
+</tr>
+</tbody>
+</table>
+<p>And these are the desired outcomes:</p>
+<ol>
+<li>Keeping the project’s history</li>
+<li>Expunging the above directories from the project’s history</li>
+<li>Decreasing the latency for a git clone operation.</li>
+</ol>
+<h1 id="Procedures">Procedures</h1><h2 id="Preparation">Preparation</h2><p>Firstly, a fresh clone of the project is executed per the below commands.<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">time git <span class="built_in">clone</span> git@&#123;host&#125;:davidyu/server.git</span><br><span class="line">Cloning into <span class="string">'server'</span>...</span><br><span class="line">remote: Counting objects: <span class="number">39031</span>, done.</span><br><span class="line">remote: Compressing objects: <span class="number">100</span>% (<span class="number">6821</span>/<span class="number">6821</span>), done.</span><br><span class="line">remote: Total <span class="number">39031</span> (delta <span class="number">21131</span>), reused <span class="number">38990</span> (delta <span class="number">21117</span>)</span><br><span class="line">Receiving objects: <span class="number">100</span>% (<span class="number">39031</span>/<span class="number">39031</span>), <span class="number">124.18</span> MiB | <span class="number">404.00</span> KiB/s, done.</span><br><span class="line">Resolving deltas: <span class="number">100</span>% (<span class="number">21131</span>/<span class="number">21131</span>), done.</span><br><span class="line">Checking connectivity... done.</span><br><span class="line">git <span class="built_in">clone</span> git@&#123;host&#125;:davidyu/server.git  <span class="number">3.09</span>s user <span class="number">2.59</span>s system <span class="number">1</span>% cpu <span class="number">5</span>:<span class="number">20.50</span> total</span><br></pre></td></tr></table></figure></p>
+<p>From the above output, the total network transferred size hit around <strong>124MB</strong> and it took <strong>5 mins,20 seconds</strong> for the clone operation to complete.</p>
+<p>To get some useful statistics for later-on comparison, the following commands were executed:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Before removal, the disk usage:</span></span><br><span class="line">du -sh .</span><br><span class="line"><span class="number">147</span>M    .</span><br><span class="line"><span class="comment"># the pack file size</span></span><br><span class="line">du -h .git/objects/pack/*</span><br><span class="line"><span class="number">1.1</span>M    .git/objects/pack/pack<span class="operator">-a</span>0a336f5f57f253aa2f47e05ae6dfaba2454e759.idx</span><br><span class="line"><span class="number">125</span>M    .git/objects/pack/pack<span class="operator">-a</span>0a336f5f57f253aa2f47e05ae6dfaba2454e759.pack</span><br><span class="line"><span class="comment"># the objects' count</span></span><br><span class="line">git count-objects -v</span><br><span class="line">count: <span class="number">0</span></span><br><span class="line">size: <span class="number">0</span></span><br><span class="line"><span class="keyword">in</span>-pack: <span class="number">39031</span></span><br><span class="line">packs: <span class="number">1</span></span><br><span class="line">size-pack: <span class="number">128228</span></span><br><span class="line">prune-packable: <span class="number">0</span></span><br><span class="line">garbage: <span class="number">0</span></span><br><span class="line">size-garbage: <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Rewriting_the_History">Rewriting the History</h2><p>In git, the command <strong>filter-branch</strong> is used for history manipulation and the following commands were executed to expunge the unused directories from the history:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch --tree-filter <span class="string">'rm -rf server/lib server/source-lib server/test-lib'</span> -- --all &gt; out &amp;</span><br><span class="line"><span class="comment"># some tail output from out</span></span><br><span class="line">Rewrite d7d0a6d12c0d978d957ee580562ecfca0a394639 (<span class="number">2933</span>/<span class="number">2935</span>) (<span class="number">2236</span> seconds passed, remaining <span class="number">1</span> predRewrite <span class="number">51</span>e3c992a51a2c3fdb14a043fe5a0f1d8b9711<span class="built_in">cd</span> (<span class="number">2935</span>/<span class="number">2935</span>) (<span class="number">2237</span> seconds passed, remaining <span class="number">0</span> predicted)    WARNING: Ref <span class="string">'refs/remotes/origin/develop'</span> is unchanged</span><br><span class="line">[<span class="number">1</span>]  + <span class="number">32730</span> <span class="keyword">done</span>       git filter-branch --tree-filter  -- --all &gt; out</span><br><span class="line"></span><br><span class="line">Ref <span class="string">'refs/heads/develop'</span> was rewritten</span><br><span class="line">Ref <span class="string">'refs/remotes/origin/develop'</span> was rewritten</span><br><span class="line">Ref <span class="string">'refs/remotes/origin/feature/erp-doc'</span> was rewritten</span><br></pre></td></tr></table></figure></p>
+<p>As it could be seen from the above output, the <strong>tree-filter was a very slow operation, which took about 2237 seconds for all the 2935 commits to complete rewritting</strong>.</p>
+<p>A more faster version was tried but in vain.<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># this command failed to erase the directories from all commits and therefore incorrect</span></span><br><span class="line">git filter-branch --index-filter <span class="string">'git rm -r --cached --ignore-unmatch server/lib server/source-lib server/test-lib'</span> -- --all)</span><br></pre></td></tr></table></figure></p>
+<p>Next, a <strong>git gc</strong> operation was carried out:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># remove the ref logs</span></span><br><span class="line">rm -rf .git/logs</span><br><span class="line"><span class="comment"># remove the old references</span></span><br><span class="line">rm -rf .git/refs/original</span><br><span class="line"><span class="comment"># run the gc</span></span><br><span class="line">git gc</span><br><span class="line">Counting objects: <span class="number">38935</span>, done.</span><br><span class="line">Delta compression using up to <span class="number">8</span> threads.</span><br><span class="line">Compressing objects: <span class="number">100</span>% (<span class="number">10445</span>/<span class="number">10445</span>), done.</span><br><span class="line">Writing objects: <span class="number">100</span>% (<span class="number">38935</span>/<span class="number">38935</span>), done.</span><br><span class="line">Total <span class="number">38935</span> (delta <span class="number">21099</span>), reused <span class="number">32232</span> (delta <span class="number">17397</span>)</span><br><span class="line">Removing duplicate objects: <span class="number">100</span>% (<span class="number">256</span>/<span class="number">256</span>), done.</span><br><span class="line"><span class="comment"># count the objects again</span></span><br><span class="line">git count-objects -v</span><br><span class="line">count: <span class="number">6799</span></span><br><span class="line">size: <span class="number">135452</span></span><br><span class="line"><span class="keyword">in</span>-pack: <span class="number">38935</span></span><br><span class="line">packs: <span class="number">1</span></span><br><span class="line">size-pack: <span class="number">20239</span></span><br><span class="line">prune-packable: <span class="number">0</span></span><br><span class="line">garbage: <span class="number">0</span></span><br><span class="line">size-garbage: <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>Now, the pack file has been shrunken from <strong>128228 to 20239</strong>, which was one sixth of the original figure.</p>
+<p>There were some left-over dangling loose objects, which could be eliminated as well by performing the folloming commands:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">git prune --expire now</span><br><span class="line">git count-objects -v</span><br><span class="line">count: <span class="number">0</span></span><br><span class="line">size: <span class="number">0</span></span><br><span class="line"><span class="keyword">in</span>-pack: <span class="number">38935</span></span><br><span class="line">packs: <span class="number">1</span></span><br><span class="line">size-pack: <span class="number">20239</span></span><br><span class="line">prune-packable: <span class="number">0</span></span><br><span class="line">garbage: <span class="number">0</span></span><br><span class="line">size-garbage: <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>Once again, let us observe the current storage consumption:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the disk usage</span></span><br><span class="line">du -sh .</span><br><span class="line"><span class="number">41</span>M    .</span><br><span class="line"><span class="comment"># the pack file size</span></span><br><span class="line">du -h .git/objects/pack/*</span><br><span class="line"><span class="number">1.1</span>M    .git/objects/pack/pack-<span class="number">0</span>c3fad6ae845bfe698122a830dc12644984db067.idx</span><br><span class="line"><span class="number">19</span>M    .git/objects/pack/pack-<span class="number">0</span>c3fad6ae845bfe698122a830dc12644984db067.pack</span><br></pre></td></tr></table></figure>
+<p>Finally, a force push was performed:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git push —force —all</span><br><span class="line">Counting objects: <span class="number">38904</span>, done.</span><br><span class="line">Delta compression using up to <span class="number">8</span> threads.</span><br><span class="line">Compressing objects: <span class="number">100</span>% (<span class="number">6735</span>/<span class="number">6735</span>), done.</span><br><span class="line">Writing objects: <span class="number">100</span>% (<span class="number">38904</span>/<span class="number">38904</span>), <span class="number">18.72</span> MiB | <span class="number">1.98</span> MiB/s, done.</span><br><span class="line">Total <span class="number">38904</span> (delta <span class="number">21087</span>), reused <span class="number">38899</span> (delta <span class="number">21086</span>)</span><br><span class="line">To git@&#123;host&#125;:davidyu/server.git</span><br><span class="line"> + <span class="number">51</span>e3c99...c041f55 develop -&gt; develop (forced update)</span><br></pre></td></tr></table></figure></p>
+<p>For comparison, another fresh clone was performed in a separate terminal to show case the difference:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">time git <span class="built_in">clone</span> git@&#123;host&#125;:davidyu/server.git</span><br><span class="line">Cloning into <span class="string">'server'</span>...</span><br><span class="line">remote: Counting objects: <span class="number">38904</span>, done.</span><br><span class="line">remote: Compressing objects: <span class="number">100</span>% (<span class="number">6734</span>/<span class="number">6734</span>), done.</span><br><span class="line">remote: Total <span class="number">38904</span> (delta <span class="number">21087</span>), reused <span class="number">38904</span> (delta <span class="number">21087</span>)</span><br><span class="line">Receiving objects: <span class="number">100</span>% (<span class="number">38904</span>/<span class="number">38904</span>), <span class="number">18.72</span> MiB | <span class="number">404.00</span> KiB/s, done.</span><br><span class="line">Resolving deltas: <span class="number">100</span>% (<span class="number">21087</span>/<span class="number">21087</span>), done.</span><br><span class="line">Checking connectivity... done.</span><br><span class="line">git <span class="built_in">clone</span> git@&#123;host&#125;:davidyu/server.git  <span class="number">0.87</span>s user <span class="number">0.86</span>s system <span class="number">3</span>% cpu <span class="number">48.899</span> total</span><br></pre></td></tr></table></figure></p>
+<p>Per the above output, it now only took around 50 seconds to network transfer around 19MB.</p>
+<h2 id="Comparison">Comparison</h2><p>A comparison table was presented below to showcase the effect of this expunge:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Metrics</th>
+<th style="text-align:left">Before the Expunge</th>
+<th style="text-align:left">After the Expunge</th>
+<th style="text-align:left">Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">pack size</td>
+<td style="text-align:left">124MB</td>
+<td style="text-align:left">18.72 MiB</td>
+<td style="text-align:left">6X leaner</td>
+</tr>
+<tr>
+<td style="text-align:left">clone time</td>
+<td style="text-align:left">5 mins,20 seconds</td>
+<td style="text-align:left">50 seconds</td>
+<td style="text-align:left">6X faster</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Conclusion">Conclusion</h1><p>Admittedly, it is my OCD that made me carry out this expunge so that more time could be saved when new developers on-board the team in the future. The repository now becomes more pleasing, lightweight to use, and needlessly to say, I could just enjoy happy coding as usual :).</p>
+<p>Out of question, the above methods could be re-used if you encounter the same issues in your project and do let me know if things go wrong!</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2016/10/11/A-Successfull-GitLab-New-Server-Migration/">
                 A-Successfull-GitLab-New-Server-Migration
               </a>
@@ -1558,7 +1708,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
