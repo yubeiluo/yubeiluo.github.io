@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.yubeiluo.me//"/>
-  <updated>2016-11-17T13:01:06.000Z</updated>
+  <updated>2017-04-14T11:31:15.000Z</updated>
   <id>http://blog.yubeiluo.me//</id>
   
   <author>
@@ -14,6 +14,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Everyday-Unix-Fortunes]]></title>
+    <link href="http://blog.yubeiluo.me/2017/04/12/Everyday-Unix-Fortunes/"/>
+    <id>http://blog.yubeiluo.me/2017/04/12/Everyday-Unix-Fortunes/</id>
+    <published>2017-04-12T07:21:16.000Z</published>
+    <updated>2017-04-14T11:31:15.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="A_Brief_Introduction">A Brief Introduction</h1><p>Recently, I have gradually developed intensive interests in container related technology and tried to leverage <a href="https://www.ansible.com/" target="_blank" rel="external">Ansible</a> and <a href="https://www.docker.com/" target="_blank" rel="external">docker</a> to solve the various SDLC issues faced by my current project. One of them is about how to gurantee consistencies across distinct environments so that the excuse of “This works on my machine” could be eliminated completely. Another one is about how to setup local dev environment effortlessly when newcomers join the team. Ideally, only two steps should be required before spinning up a local development environment: 1) git clone repo 2) run a script such as docker-composer up. Then, there you go!</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/ItWorksOnMyMachine.jpg" alt=""></p>
+<p>After spent a while digging into Ansible and by trying my best to follow the recommended best practices, I managed to come up with various working ansible playbooks and roles to automate the current manual process of system provisioning. The following diagram depicts well about the renovated structure.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_2.png" alt=""></p>
+<h1 id="The_Base_Role">The Base Role</h1><p>To start with, the base role serves as a jumping off point for all other roles, which provisions some common dependencies and configurations such as:</p>
+<ol>
+<li><p>vim configuration</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> nocompatible</span><br><span class="line">syntax on</span><br><span class="line"><span class="built_in">set</span> tabstop=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> softtabstop=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> shiftwidth=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> noexpandtab</span><br><span class="line"><span class="built_in">set</span> number</span><br><span class="line"><span class="built_in">set</span> nobackup</span><br><span class="line"><span class="built_in">set</span> ignorecase</span><br><span class="line"><span class="built_in">set</span> hlsearch</span><br><span class="line"><span class="built_in">set</span> incsearch</span><br><span class="line"><span class="built_in">set</span> ruler</span><br><span class="line">filetype on</span><br><span class="line">filetype plugin on</span><br><span class="line">filetype indent on</span><br><span class="line"><span class="built_in">set</span> backspace=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> showmatch</span><br><span class="line"><span class="built_in">set</span> smartindent</span><br><span class="line"><span class="built_in">set</span> cindent</span><br><span class="line">colorscheme molokai</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git configuration</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">  editor=vim</span><br><span class="line">[<span class="built_in">alias</span>]</span><br><span class="line">  st = status <span class="operator">-s</span></span><br><span class="line">  ci = commit</span><br><span class="line">  l = <span class="built_in">log</span> --oneline --decorate -<span class="number">12</span> --color</span><br><span class="line">  ll = <span class="built_in">log</span> --oneline --decorate --color</span><br><span class="line">  lc = <span class="built_in">log</span> --graph --color</span><br><span class="line">  co = checkout</span><br><span class="line">  br = branch</span><br><span class="line">  rb = rebase</span><br><span class="line">  dci = dcommit</span><br><span class="line">  sbi = submodule init</span><br><span class="line">  sbu = submodule update</span><br><span class="line">  sbp = submodule foreach git pull</span><br><span class="line">  sbc = submodule foreach git co master</span><br><span class="line">  gg = <span class="built_in">log</span> --oneline --abbrev-commit --all --graph --decorate --color</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>system performance monitor tools: iftop, htop, lsof</p>
+</li>
+</ol>
+<h2 id="MOTD">MOTD</h2><p>One of the most awesome tasks is called <strong>motd.yml</strong> shown as below.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_3.png" alt=""></p>
+<p>MOTD is in fact a unix custom and an acronym for “message of the day”, the purpose of which is to display dynamic data about the box from various aspects. For example, it could be the current system load, software upgrades notification, to name but a few.</p>
+<p>Things could be made more humorous and instructive by adding the following message template to be displayed to whoever has just sshed to the box.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_4.png" alt=""></p>
+<p>So, the final outcome is that the moment you have logged into a running box, a random wisdom quote, which is selected out of hundreds of millions, will be shown to you. As login counts increase, one could bet that there would definitely exist some quotes that you will love, read it out aloud and share with your friends.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_5.png" alt="">  </p>
+<p>So the following curated list is my favorite ones that I would like to share in this blog. As time goes on, the list grows as well and I hope that you could enjoy as much as I do:).</p>
+<h1 id="Memorable_Fortunes">Memorable Fortunes</h1><h2 id="12/04/2017">12/04/2017</h2><p>“Have a place for everything and keep the thing somewhere else; this is not advice, it is merely custom.” — Mark Twain.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_1.png" alt=""></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="A_Brief_Introduction">A Brief Introduction</h1><p>Recently, I have gradually developed intensive interests in container related tech]]>
+    </summary>
+    
+      <category term="unix" scheme="http://blog.yubeiluo.me/categories/unix/"/>
+    
+      <category term="fun" scheme="http://blog.yubeiluo.me/categories/unix/fun/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[How-to-Expunge-Large-Binary-File-from-Git-Repository]]></title>

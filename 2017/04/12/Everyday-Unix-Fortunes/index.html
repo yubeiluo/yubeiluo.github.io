@@ -23,7 +23,7 @@
 
 
 
-  <meta name="keywords" content="nodejs,winston," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-  <title> Winston Rolling File Appender // A passionate coder, footballer and dreamer </title>
+  <title> Everyday-Unix-Fortunes // A passionate coder, footballer and dreamer </title>
 </head>
 
 <body>
@@ -169,7 +169,7 @@
           
           
             
-              Winston Rolling File Appender
+              Everyday-Unix-Fortunes
             
           
         </h1>
@@ -177,14 +177,22 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-06-29
+          Posted on 2017-04-12
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/nodejs/">nodejs</a>
+              <a href="/categories/unix/">unix</a>
+
+              
+              
+                , 
+              
+
+            
+              <a href="/categories/unix/fun/">fun</a>
 
               
               
@@ -197,8 +205,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/29/Winston-Rolling-File-Appender/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/29/Winston-Rolling-File-Appender/"></span>
+            <a href="/2017/04/12/Everyday-Unix-Fortunes/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/12/Everyday-Unix-Fortunes/"></span>
             </a>
           </span>
           
@@ -212,62 +220,47 @@
       
 
       
-        <p><a href="https://github.com/winstonjs/winston" target="_blank" rel="external">Winston</a> is a great library for asynchronous logging in nodejs applications. It has the wonderful abstraction of transport where log messages will be delivered to and several built-in transports are provided out of the box per the below table (the list is incomplete).</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Transport Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Console</td>
-<td>Log the messages in the console</td>
-</tr>
-<tr>
-<td style="text-align:left">File</td>
-<td>Log the messages in a file such as <strong>app.log</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">DailyRotateFile</td>
-<td>Log the message in a file that rotates bases upon rules like the capped file size, date pattern</td>
-</tr>
-</tbody>
-</table>
-<p>For a production setup, you will find the <strong>DailyRotateFile</strong> transport useful since it could rotate your log files automatically based on the rules which are configurable.</p>
-<h2 id="Problems">Problems</h2><p>If you follow the instructions outlined in the official winston repo, it is very likely that you will feel as surprised as I do. To summarize, here is a list of issues that make me feel uncomfortable sorted by the level from the most serious to the least.</p>
-<h3 id="Message_Loss">Message Loss</h3><p>Yes!! You hear me, some messages will fail to be delivered to the log file. This is what exactly happened to my environment, where there are two transports configured, one is the <strong>Console</strong> and the other is the <strong>DailyRotateFile</strong>. After the app bootstraps, by comparing the messages between the console and the file, it is observed that some message will become lost in the file. Since logging is such as vital part of an application, how could you endure and afford the consequences of any message losses?</p>
-<h3 id="Not_Tailer_Friendly">Not Tailer Friendly</h3><p>I admit that it is the OCD that helps to forge a habit that every time before an app is run, I will open another terminal to tail the app log file to see if everything goes on smoothly as expected and this command is often an alias defined in the bash profile such as</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> app.log=tail <span class="operator">-f</span> <span class="variable">$APP_HOME</span>/logs/app.log</span><br></pre></td></tr></table></figure>
-<p>But when using the <strong>DailyRotateFile</strong> transport, the file name is dynamic according to the configured rules. The default value is the configured file name plus the current date suffix in the <strong>yyyy-mm-dd</strong> format like <strong>app.2015-06-29.log</strong>.</p>
-<p>The problem with this is that there is no way to define a permanent alias to tail the log file since the file name changes and it would be handy if the transport could produce a file that never changes its name but still contains the latest log messages.</p>
-<p>What about a symbolic link file that always links to the up-to-date log file and changes as well when the underlying file changes?</p>
-<h2 id="Solution">Solution</h2><p>After reading the source code of winston, I have decided to fork the <a href="https://github.com/mallocator/Winston-Rolling-File-Appender" target="_blank" rel="external">Winston-Rolling-File-Appender</a> and roll out my own version of <strong>DailyRotateFile</strong> transport. Please go to <a href="https://github.com/yubeiluo/Winston-Rolling-File-Appender" target="_blank" rel="external">Another-Winston-Rolling-File-Appender</a> for furthur details about this little tranport that makes my life eaiser. Hopefully it could help you as well if by any chance you are suffering from the same issues.</p>
+        <h1 id="A_Brief_Introduction">A Brief Introduction</h1><p>Recently, I have gradually developed intensive interests in container related technology and tried to leverage <a href="https://www.ansible.com/" target="_blank" rel="external">Ansible</a> and <a href="https://www.docker.com/" target="_blank" rel="external">docker</a> to solve the various SDLC issues faced by my current project. One of them is about how to gurantee consistencies across distinct environments so that the excuse of “This works on my machine” could be eliminated completely. Another one is about how to setup local dev environment effortlessly when newcomers join the team. Ideally, only two steps should be required before spinning up a local development environment: 1) git clone repo 2) run a script such as docker-composer up. Then, there you go!</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/ItWorksOnMyMachine.jpg" alt=""></p>
+<p>After spent a while digging into Ansible and by trying my best to follow the recommended best practices, I managed to come up with various working ansible playbooks and roles to automate the current manual process of system provisioning. The following diagram depicts well about the renovated structure.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_2.png" alt=""></p>
+<h1 id="The_Base_Role">The Base Role</h1><p>To start with, the base role serves as a jumping off point for all other roles, which provisions some common dependencies and configurations such as:</p>
+<ol>
+<li><p>vim configuration</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> nocompatible</span><br><span class="line">syntax on</span><br><span class="line"><span class="built_in">set</span> tabstop=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> softtabstop=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> shiftwidth=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> noexpandtab</span><br><span class="line"><span class="built_in">set</span> number</span><br><span class="line"><span class="built_in">set</span> nobackup</span><br><span class="line"><span class="built_in">set</span> ignorecase</span><br><span class="line"><span class="built_in">set</span> hlsearch</span><br><span class="line"><span class="built_in">set</span> incsearch</span><br><span class="line"><span class="built_in">set</span> ruler</span><br><span class="line">filetype on</span><br><span class="line">filetype plugin on</span><br><span class="line">filetype indent on</span><br><span class="line"><span class="built_in">set</span> backspace=<span class="number">2</span></span><br><span class="line"><span class="built_in">set</span> showmatch</span><br><span class="line"><span class="built_in">set</span> smartindent</span><br><span class="line"><span class="built_in">set</span> cindent</span><br><span class="line">colorscheme molokai</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git configuration</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">  editor=vim</span><br><span class="line">[<span class="built_in">alias</span>]</span><br><span class="line">  st = status <span class="operator">-s</span></span><br><span class="line">  ci = commit</span><br><span class="line">  l = <span class="built_in">log</span> --oneline --decorate -<span class="number">12</span> --color</span><br><span class="line">  ll = <span class="built_in">log</span> --oneline --decorate --color</span><br><span class="line">  lc = <span class="built_in">log</span> --graph --color</span><br><span class="line">  co = checkout</span><br><span class="line">  br = branch</span><br><span class="line">  rb = rebase</span><br><span class="line">  dci = dcommit</span><br><span class="line">  sbi = submodule init</span><br><span class="line">  sbu = submodule update</span><br><span class="line">  sbp = submodule foreach git pull</span><br><span class="line">  sbc = submodule foreach git co master</span><br><span class="line">  gg = <span class="built_in">log</span> --oneline --abbrev-commit --all --graph --decorate --color</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>system performance monitor tools: iftop, htop, lsof</p>
+</li>
+</ol>
+<h2 id="MOTD">MOTD</h2><p>One of the most awesome tasks is called <strong>motd.yml</strong> shown as below.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_3.png" alt=""></p>
+<p>MOTD is in fact a unix custom and an acronym for “message of the day”, the purpose of which is to display dynamic data about the box from various aspects. For example, it could be the current system load, software upgrades notification, to name but a few.</p>
+<p>Things could be made more humorous and instructive by adding the following message template to be displayed to whoever has just sshed to the box.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_4.png" alt=""></p>
+<p>So, the final outcome is that the moment you have logged into a running box, a random wisdom quote, which is selected out of hundreds of millions, will be shown to you. As login counts increase, one could bet that there would definitely exist some quotes that you will love, read it out aloud and share with your friends.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_5.png" alt="">  </p>
+<p>So the following curated list is my favorite ones that I would like to share in this blog. As time goes on, the list grows as well and I hope that you could enjoy as much as I do:).</p>
+<h1 id="Memorable_Fortunes">Memorable Fortunes</h1><h2 id="12/04/2017">12/04/2017</h2><p>“Have a place for everything and keep the thing somewhere else; this is not advice, it is merely custom.” — Mark Twain.</p>
+<p><img src="/uploads/Everyday-Unix-Fortunes/screenshot_1.png" alt=""></p>
 
       
     </div>
 
     <div class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/nodejs/"> #nodejs </a>
-          
-            <a href="/tags/winston/"> #winston </a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/07/08/Use-Css-After-Psuedo-Element-To-Center-Play-Icon/">Use Css After Psuedo Element To Center Play Icon</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/17/How-to-Expunge-Large-Binary-File-from-Git-Repository/">How-to-Expunge-Large-Binary-File-from-Git-Repository</a>
             
           </div>
         </div>
@@ -287,8 +280,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/06/29/Winston-Rolling-File-Appender/"
-               data-title="Winston Rolling File Appender" data-url="http://blog.yubeiluo.me/2015/06/29/Winston-Rolling-File-Appender/">
+          <div class="ds-thread" data-thread-key="2017/04/12/Everyday-Unix-Fortunes/"
+               data-title="Everyday-Unix-Fortunes" data-url="http://blog.yubeiluo.me/2017/04/12/Everyday-Unix-Fortunes/">
           </div>
         
       </div>
@@ -406,7 +399,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problems"><span class="nav-number">1.</span> <span class="nav-text">Problems</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Message_Loss"><span class="nav-number">1.1.</span> <span class="nav-text">Message Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Not_Tailer_Friendly"><span class="nav-number">1.2.</span> <span class="nav-text">Not Tailer Friendly</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A_Brief_Introduction"><span class="nav-number">1.</span> <span class="nav-text">A Brief Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The_Base_Role"><span class="nav-number">2.</span> <span class="nav-text">The Base Role</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MOTD"><span class="nav-number">2.1.</span> <span class="nav-text">MOTD</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memorable_Fortunes"><span class="nav-number">3.</span> <span class="nav-text">Memorable Fortunes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#12/04/2017"><span class="nav-number">3.1.</span> <span class="nav-text">12/04/2017</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
